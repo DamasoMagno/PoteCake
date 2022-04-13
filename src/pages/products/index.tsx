@@ -10,7 +10,7 @@ import {
   Product
 } from "./styles";
 
-export default function products() {
+export default function Products() {
   return (
     <>
       <Header />
