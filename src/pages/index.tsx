@@ -24,7 +24,7 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
 
-export default function HomeContent() {
+export default function Home() {
   return (
     <>
       <main>
