@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { FiPhone, FiMail } from "react-icons/fi"
 
@@ -9,7 +10,7 @@ import {
   Scrollbar
 } from "swiper";
 
-import { Header } from "../components/Header";
+import { Header } from "../../components/Header/index.page";
 
 import {
   Categories,
@@ -18,7 +19,7 @@ import {
   Comment,
   Category,
   Contact
-} from "../styles/Home";
+} from "./styles";
 
 import 'swiper/css';
 import 'swiper/css';
@@ -29,8 +30,6 @@ import 'swiper/css/scrollbar';
 export default function Home() {
   return (
     <>
-      <Header />
-
       <main>
         <Description>
           <div className="description">
@@ -39,10 +38,7 @@ export default function Home() {
             <Link href="/products">Explorar Menu</Link>
           </div>
           <div className="logo">
-            <img
-              src="assets/logo.svg"
-              alt="Bolo de Chocolate Confeitado"
-            />
+            <img src="assets/logo.svg" alt="Bolo de Chocolate Confeitado"/>
           </div>
         </Description>
 
@@ -59,10 +55,6 @@ export default function Home() {
                 728: {
                   width: 400,
                   slidesPerView: 1,
-                },
-                1024: {
-                  width: 1024,
-                  slidesPerView: 2,
                 },
                 1200: {
                   width: 1200,

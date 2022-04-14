@@ -51,16 +51,16 @@ export const ProductList = styled.div`
   grid-template-columns: repeat(2, 1fr);
   gap: 1rem;
 
-  @media(max-width: 768px){
+  @media (max-width: 768px) {
     grid-template-columns: 1fr;
   }
 `;
 
 export const Product = styled.div`
   display: flex;
-  border: 1px solid rgba(232, 232, 232, 1)  ;
-  border-radius: .5rem;
-  background: #FDFDFD;
+  border: 1px solid rgba(232, 232, 232, 1);
+  border-radius: 0.5rem;
+  background: #fdfdfd;
 
   img {
     width: 30%;
@@ -81,8 +81,8 @@ export const Product = styled.div`
 
       p {
         color: #383838;
-        margin-top: .5rem;
-        font-size: .85rem;
+        margin-top: 0.5rem;
+        font-size: 0.85rem;
       }
     }
 
@@ -93,18 +93,18 @@ export const Product = styled.div`
       align-items: baseline;
 
       button {
-        background: #733C30;
-        color: #FFF;
+        background: #733c30;
+        color: #fff;
         display: flex;
         align-items: center;
         justify-content: center;
         border: 0;
-        border-radius: .25rem;
-        padding: .25rem 1rem;
+        border-radius: 0.25rem;
+        padding: 0.25rem 1rem;
         font-size: 1rem;
 
         svg {
-          margin-right: .25rem;
+          margin-right: 0.25rem;
         }
       }
     }
