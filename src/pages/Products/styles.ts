@@ -23,6 +23,10 @@ export const SearchAndFilter = styled.div`
       margin-left: 0.5rem;
     }
 
+    &.filter, select {
+      cursor: pointer;
+    }
+
     input,
     select {
       background: transparent;

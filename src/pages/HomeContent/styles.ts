@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { SwiperSlide } from "swiper/react";
+import { darken } from "polished"
 
 export const Description = styled.section`
   max-width: 1200px;
@@ -34,19 +35,18 @@ export const Description = styled.section`
       width: 50%;
       justify-content: center;
       align-items: center;
-      transition: 250ms;
+      transition: background .25s;
       border-radius: 0.25rem;
 
       &:hover {
-        filter: brightness(0.9);
+        background: ${darken(.2, "#f2c029")};
       }
     }
   }
 
   .logo {
-    max-width: 528px;
+    max-width: 450px;
     width: 80%;
-    position: relative;
 
     img {
       width: 100%;

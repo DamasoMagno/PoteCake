@@ -7,7 +7,8 @@ import {
   SearchAndFilter,
   ProductList,
   Product
-} from "../../styles/Products";
+} from "./styles";
+import { Header } from "../../components/Header/index.page";
 
 export default function Products() {
   return (
@@ -19,7 +20,7 @@ export default function Products() {
             <MdSearch />
           </div>
 
-          <div>
+          <div className="filter">
             <select placeholder="Categoria">
               <option>Bolos</option>
             </select>
@@ -45,34 +46,6 @@ export default function Products() {
                 <strong>
                   R$70.00
                 </strong>
-                <button>
-                  <MdAddShoppingCart />
-                  Carrinho
-                </button>
-              </div>
-            </div>
-          </Product>
-          <Product>
-            <img
-              src="/assets/product.svg"
-              alt="Bolo de chocolate"
-            />
-            <div className="description">
-              <div className="productInformation">
-                <h3>Bolo de Chocolate</h3>
-                <p>
-                  Este bolo e de chocolate e nao
-                  esta queimado isso é mau passado : )
-                </p>
-              </div>
-              <div className="addProductCart">
-                <strong>
-                  R$70.00
-                </strong>
-                <button>
-                  <MdAddShoppingCart />
-                  Carrinho
-                </button>
               </div>
             </div>
           </Product>
