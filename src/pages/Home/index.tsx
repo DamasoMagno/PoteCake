@@ -10,8 +10,6 @@ import {
   Scrollbar
 } from "swiper";
 
-import { Header } from "../../components/Header/index.page";
-
 import {
   Categories,
   Description,
@@ -19,7 +17,7 @@ import {
   Comment,
   Category,
   Contact
-} from "./styles";
+} from "../../styles/Home";
 
 import 'swiper/css';
 import 'swiper/css';
@@ -38,7 +36,7 @@ export default function Home() {
             <Link href="/products">Explorar Menu</Link>
           </div>
           <div className="logo">
-            <img src="assets/logo.svg" alt="Bolo de Chocolate Confeitado"/>
+            <img src="assets/logo.svg" alt="Bolo de Chocolate Confeitado" />
           </div>
         </Description>
 

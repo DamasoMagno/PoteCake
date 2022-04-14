@@ -1,20 +1,17 @@
 import { MdSearch } from "react-icons/md";
 import { IoIosArrowDown } from "react-icons/io";
 import { MdAddShoppingCart } from "react-icons/md";
-import { Header } from "../../components/Header/index.page";
 
 import {
   Container,
   SearchAndFilter,
   ProductList,
   Product
-} from "./styles";
+} from "../../styles/Products";
 
 export default function Products() {
   return (
     <>
-      <Header />
-
       <Container>
         <SearchAndFilter>
           <div>
