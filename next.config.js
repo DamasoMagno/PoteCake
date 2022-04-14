@@ -3,10 +3,7 @@ const nextConfig = {
   reactStrictMode: true,
   compiler: {
     styledComponents: true
-  },
-  pageExtensions: [
-    "page.tsx", "api.js"
-  ]
+  }
 }
 
 module.exports = nextConfig

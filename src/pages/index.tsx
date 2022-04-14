@@ -16,7 +16,7 @@ import {
   Comment,
   Category,
   Contact
-} from "./styles";
+} from "../styles/Home";
 
 import 'swiper/css';
 import 'swiper/css';
@@ -24,7 +24,7 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
 
-export function HomeContent() {
+export default function HomeContent() {
   return (
     <>
       <main>
