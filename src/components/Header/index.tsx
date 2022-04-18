@@ -6,11 +6,11 @@ import { MdClose } from "react-icons/md";
 import { Container, Content } from "./styles";
 
 export function Header() {
-  const [ menuVisible, setMenuVisible ] = useState(false);
+  const [menuVisible, setMenuVisible] = useState(false);
 
   return (
     <Container>
-      <Content>
+      <Content visible={menuVisible}>
         <Link href="/">
           <h2 className="logo">
             Pote<strong>Cake</strong>
@@ -19,8 +19,8 @@ export function Header() {
 
         <nav className={menuVisible && "mobileMenu"}>
           <Link href="/">Inicio</Link>
-          <Link href="/Products">Produtos</Link>
-          <Link href="/Cart"> Carrinho</Link>
+          <Link href="/products">Produtos</Link>
+          <Link href="/cart"> Carrinho</Link>
         </nav>
 
         <button onClick={() => setMenuVisible(false)} className="closeMenu">

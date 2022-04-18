@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 export const Container = styled.header`
   background: #fff;
@@ -9,7 +9,7 @@ export const Container = styled.header`
   top: 0;
 `;
 
-export const Content = styled.div`
+export const Content = styled.div<{ visible: boolean }>`
   margin: 0 auto;
   max-width: 1200px;
   width: var(--screen-width);
@@ -53,31 +53,6 @@ export const Content = styled.div`
         color: #7e392a;
       }
     }
-
-    @media (max-width: 728px) {
-      &.mobileMenu {
-        position: fixed;
-        background-color: #fafafa;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-
-        a {
-          margin: 0.15rem 0;
-          width: 100%;
-          font-size: 1.5rem;
-          font-weight: bold;
-          text-align: center;
-          padding: 1rem;
-          transition: background 0.25s;
-        }
-      }
-    }
   }
 
   button {
@@ -98,5 +73,50 @@ export const Content = styled.div`
       height: 2rem;
       color: #333;
     }
+  }
+
+  @media (max-width: 720px) {
+    ${(props) =>
+      props.visible &&
+      css`
+        position: fixed;
+        background-color: #fafafa;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        gap: 2rem;
+        padding-top: 1rem;
+
+        .closeMenu {
+          display: block;
+          position: absolute;
+          right: 10%;
+          top: 20px;
+        }
+
+        .openMenu {
+          display: none !important;
+        }
+
+        nav {
+          display: flex;
+          order: 3;
+          flex-direction: column;
+        }
+
+        a {
+          margin: 0.15rem 0;
+          width: 100%;
+          font-size: 1.5rem;
+          font-weight: bold;
+          text-align: center;
+          padding: 1rem;
+          transition: background 0.25s;
+        }
+      `}
   }
 `;
