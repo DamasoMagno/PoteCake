@@ -113,4 +113,12 @@ export const Product = styled.div`
       }
     }
   }
+
+  @media(max-width: 428px){
+    flex-direction: column;
+
+    img {
+      width: 100%;
+    }
+  }
 `;

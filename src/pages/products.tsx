@@ -1,4 +1,5 @@
 import { MdSearch } from "react-icons/md";
+import { MdAddShoppingCart } from "react-icons/md";
 import { IoIosArrowDown } from "react-icons/io";
 
 import {
@@ -44,6 +45,90 @@ export default function Products() {
                 <strong>
                   R$70.00
                 </strong>
+              </div>
+            </div>
+          </Product>
+          <Product>
+            <img
+              src="/assets/product.svg"
+              alt="Bolo de chocolate"
+            />
+            <div className="description">
+              <div className="productInformation">
+                <h3>Bolo de Chocolate</h3>
+                <p>
+                  Este bolo e de chocolate e nao
+                  esta queimado isso é mau passado : )
+                </p>
+              </div>
+              <div className="addProductCart">
+                <strong>
+                  R$70.00
+                </strong>
+              </div>
+            </div>
+          </Product>
+          <Product>
+            <img
+              src="/assets/product.svg"
+              alt="Bolo de chocolate"
+            />
+            <div className="description">
+              <div className="productInformation">
+                <h3>Bolo de Chocolate</h3>
+                <p>
+                  Este bolo e de chocolate e nao
+                  esta queimado isso é mau passado : )
+                </p>
+              </div>
+              <div className="addProductCart">
+                <strong>
+                  R$70.00
+                </strong>
+              </div>
+            </div>
+          </Product>
+          <Product>
+            <img
+              src="/assets/product.svg"
+              alt="Bolo de chocolate"
+            />
+            <div className="description">
+              <div className="productInformation">
+                <h3>Bolo de Chocolate</h3>
+                <p>
+                  Este bolo e de chocolate e nao
+                  esta queimado isso é mau passado : )
+                </p>
+              </div>
+              <div className="addProductCart">
+                <strong>
+                  R$70.00
+                </strong>
+              </div>
+            </div>
+          </Product>
+          <Product>
+            <img
+              src="/assets/product.svg"
+              alt="Bolo de chocolate"
+            />
+            <div className="description">
+              <div className="productInformation">
+                <h3>Bolo de Chocolate</h3>
+                <p>
+                  Este bolo e de chocolate e nao
+                  esta queimado isso é mau passado : )
+                </p>
+              </div>
+              <div className="addProductCart">
+                <strong>
+                  R$70.00
+                </strong>
+                <button>
+                  <MdAddShoppingCart />
+                  Adicionar
+                </button>
               </div>
             </div>
           </Product>

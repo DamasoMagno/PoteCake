@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { FiMenu } from "react-icons/fi";
 import { MdClose } from "react-icons/md";
@@ -11,7 +11,12 @@ export function Header() {
 
   const [menuVisible, setMenuVisible] = useState(false);
 
-  function setLinkAsActive(page: string){
+  useEffect(
+    () => setMenuVisible(false),
+    [pathname]
+  );
+
+  function setLinkAsActive(page: string) {
     return page === pathname ? "navigation active" : "navigation";
   }
 

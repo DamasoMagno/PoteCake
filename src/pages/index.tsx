@@ -147,7 +147,7 @@ export default function Home() {
             <Swiper
               className="depoimentsContainer"
               modules={[Navigation, Pagination, Scrollbar, A11y]}
-              spaceBetween={10}
+              spaceBetween={20}
               breakpoints={{
                 728: {
                   width: 728,
