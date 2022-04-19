@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { FiPhone, FiMail } from "react-icons/fi"
-
 import {
   A11y,
   Navigation,
@@ -31,7 +30,10 @@ export default function Home() {
         <Description>
           <div className="description">
             <h1>Lorem Ipsum dolor sit amet</h1>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam non lectus.</p>
+            <p>
+              Lorem ipsum dolor sit amet, consectetur 
+              adipiscing elit. Aliquam non lectus.
+            </p>
             <Link href="/products">Explorar Menu</Link>
           </div>
           <div className="logo">
@@ -138,13 +140,14 @@ export default function Home() {
         <Comments>
           <div>
             <h2>
-              <strong>Comentários</strong> de quem já comprou conosco
+              <strong>Comentários</strong> 
+              de quem já comprou conosco
             </h2>
 
             <Swiper
               className="depoimentsContainer"
               modules={[Navigation, Pagination, Scrollbar, A11y]}
-              spaceBetween={50}
+              spaceBetween={10}
               breakpoints={{
                 728: {
                   width: 728,

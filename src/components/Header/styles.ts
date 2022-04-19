@@ -7,6 +7,7 @@ export const Container = styled.header`
   position: sticky;
   position: -webkit-sticky;
   top: 0;
+  z-index: 2;
 `;
 
 export const Content = styled.div<{ visible: boolean }>`
@@ -43,10 +44,11 @@ export const Content = styled.div<{ visible: boolean }>`
       display: none;
     }
 
-    a {
+    .navigation {
       color: rgba(0, 0, 0, 0.6);
       transition: color 0.25s;
       font-weight: 600;
+      cursor: pointer;
 
       &:hover,
       &.active {
