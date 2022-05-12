@@ -9,8 +9,8 @@
 ## Tecnologias Usadas
 <ul>
  <li>NextJs</li>
- <li>NextAuth</li>
  <li>Stripe</li>
- <li>Styled Components</li>
+ <li>TailwindCSS</li>
  <li>Vercel</li>
+ <li>Strapi</li>
 </ul>
