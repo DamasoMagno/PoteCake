@@ -1,10 +1,25 @@
 {
-  "categories": [{
-    "category": "Cake",
-    "products": [
-      {
-        "sabor": ""
-      }
-    ]
-  }]
+  "products": [
+    {
+      "id": "123dawd",
+      "name": "Bolo de Chocolate",
+      "price": 25.00,
+      "description": "Delicioso bolo de chocolate",
+      "category": "Bolo"
+    },
+    {
+      "id": "123dagd",
+      "name": "Bolo de Chocolat",
+      "price": 25.00,
+      "description": "Delicioso bolo de chocolate",
+      "category": "Bolo"
+    },
+    {
+      "id": "123dawddd",
+      "name": "Bolo de Chocolate",
+      "price": 25.00,
+      "description": "Delicioso bolo de chocolate",
+      "category": "Bolo"
+    }
+  ]
 }

@@ -1,38 +1,37 @@
+import { ButtonHTMLAttributes } from "react";
 import { FaUtensils } from "react-icons/fa"
+import { Product } from "../types/Product";
 
-export type ProductProps = {
-  name: string;
-  description: string;
-  price: number;
-  image: string;
-  category: string;
+interface ProductProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+  product: Product
 }
 
-export function Product({ 
-  name, 
-  description, 
-  price, 
-  image, 
-  category 
-}: ProductProps) {
+export function Product({product, ...props}: ProductProps) {
   return (
-    <div className="max-w-sm">
-      <img src={image} alt="Bolo de chocolate" className="w-full rounded-2xl" />
+    <button 
+      className="max-w-sm text-left" 
+      {...props}
+    >
+      <img 
+        src="assets/logo.svg"
+        alt="Bolo de chocolate" 
+        className="w-full rounded-2xl" 
+      />
       <div>
         <div className="flex justify-between items-center">
           <h3 className="text-lg font-bold">
-            {name}
+            {product.name}
           </h3>
-          <strong>R${price}</strong>
+          <strong>R${product.price}</strong>
         </div>
         <p className="text-xs text-gray-500">
-          {description}
+          {product.description}
         </p>
         <small className="mt-3 text-sm flex items-center gap-2">
           <FaUtensils color="#A3A3A4"/>
-          {category}
+          {product.category}
         </small>
       </div>
-    </div>
+    </button>
   );
 }

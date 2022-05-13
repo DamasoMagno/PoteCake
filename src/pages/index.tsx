@@ -1,9 +1,24 @@
 import Image from "next/image";
+import { useContext, useEffect, useState } from "react";
+import { api } from "../services/api";
+import { Product as ProductType } from "../types/Product";
 
 import { Product } from "../components/Product";
 import { Header } from "../components/Header";
+import { CartContext } from "../context/CartContext";
 
 export default function Home() {
+  const { addProductToCart } = useContext(CartContext);
+
+  const [products, setProducts] = useState<ProductType[]>([]);
+
+  useEffect(() => {
+    api.get("/")
+      .then(response => 
+        setProducts(response.data)
+      );
+  }, []);
+
   return (
     <>
       <section className="bg-primary">
@@ -18,8 +33,8 @@ export default function Home() {
               </strong>
             </h2>
             <p className="mt-8 leading-6 text-gray-300 text-lg sm:text-xl max-w-sm">
-            Na potecake, priorizamos a boa experiência 
-            de nossos clientes, com nossas comdias
+              Na potecake, priorizamos a boa experiência
+              de nossos clientes, com nossas comdias
             </p>
           </div>
           <Image
@@ -35,41 +50,13 @@ export default function Home() {
         <h2 className="text-2xl font-bold">Nosso Cardápio</h2>
 
         <div className="mt-4 grid gap-12 md:grid-cols-2 xl:grid-cols-4">
-          <Product
-            name="Pizza de Calabresa"
-            category="Bolo"
-            price={30.00}
-            description="Este bolo e de chocolate e nao esta queimado isso é mau passado"
-            image="/assets/product.svg"
-          />
-          <Product
-            name="Bolo de Chocolate"
-            category="Bolo"
-            price={30.00}
-            description="Este bolo e de chocolate e nao esta queimado isso é mau passado"
-            image="/assets/product.svg"
-          />
-          <Product
-            name="Bolo de Chocolate"
-            category="Bolo"
-            price={30.00}
-            description="Este bolo e de chocolate e nao esta queimado isso é mau passado"
-            image="/assets/product.svg"
-          />
-          <Product
-            name="Bolo de Chocolate"
-            category="Bolo"
-            price={30.00}
-            description="Este bolo e de chocolate e nao esta queimado isso é mau passado"
-            image="/assets/product.svg"
-          />
-          <Product
-            name="Bolo de Chocolate"
-            category="Bolo"
-            price={30.00}
-            description="Este bolo e de chocolate e nao esta queimado isso é mau passado"
-            image="/assets/product.svg"
-          />
+          {products.map(product => (
+            <Product
+              product={product}
+              key={product.id}
+              onClick={() => addProductToCart(product.id)}
+            />
+          ))}
         </div>
       </main>
     </>
