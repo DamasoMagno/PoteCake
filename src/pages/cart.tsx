@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { MdAdd, MdEdit, MdRemove, MdSave } from "react-icons/md";
+import { MdAdd, MdDelete, MdEdit, MdRemove, MdSave } from "react-icons/md";
 import { useCart } from "../context/CartContext";
 
 import { Header } from "../components/Header";
@@ -83,7 +83,11 @@ export default function Products() {
                       onClick={() => removeProductQuantity(product.id)}
                       className="bg-orange-200 flex justify-center items-center rounded-lg p-2 transition-all duration-200 hover:bg-orange-300"
                     >
-                      <MdRemove size={18} color="#A46254" />
+                      {product.quantity > 1 ? (
+                        <MdRemove size={18} color="#A46254" />
+                      ) : (
+                        <MdDelete size={18} color="#A46254" />
+                      )}
                     </button>
                   </div>
                 </div>

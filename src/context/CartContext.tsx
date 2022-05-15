@@ -5,6 +5,9 @@ import {
   useEffect,
   useState
 } from "react";
+import { useRouter } from "next/router";
+import { toast } from "react-toastify";
+
 import { api } from "../services/api";
 
 type ProductCart = {
@@ -30,6 +33,8 @@ type CartProviderProps = {
 export const CartContext = createContext({} as CartContextProps);
 
 export function CartProvider({ children }: CartProviderProps) {
+  const router = useRouter();
+
   const [cart, setCart] = useState<ProductCart[]>([]);
 
   useEffect(() => {
@@ -49,7 +54,11 @@ export function CartProvider({ children }: CartProviderProps) {
         productCard => productCard.id === product.id
       );
 
-      if (cartHasProduct > -1) return;
+      if (cartHasProduct > -1) {
+        toast(`${product.name} já foi adicioando ao carrinho`);
+
+        return;
+      };
 
       setCart(cart => [
         ...cart,
@@ -62,7 +71,9 @@ export function CartProvider({ children }: CartProviderProps) {
         }
       ]);
 
-      localStorage.setItem("@cart", JSON.stringify(allProducts))
+      localStorage.setItem("@cart", JSON.stringify(allProducts));
+
+      router.push("/cart");
     } catch (error) {
       console.log(error);
     }
@@ -124,24 +135,35 @@ export function CartProvider({ children }: CartProviderProps) {
     }
   }
 
-  function checkout(){
+  function checkout() {
     const userAddress = JSON.parse(localStorage.getItem("@address"));
 
-    const product = {
-      address: userAddress,
-      products: cart.map( ( product: ProductCart ) => {
-        return {
-          quantidade: product.quantity,
-          valorPagamento: product.totalPrice,
-          produto: product.name
-        }
-      })
-    }
+    const message = `
+      endereço: ${userAddress}
+      \n
+      produto: ${JSON.stringify(cart.map(product => {
+      return {
+        nome: product.name
+      }
+    }))}
+    `;
 
     localStorage.setItem("@cart", JSON.stringify([]));
     setCart([]);
 
-    console.log(product);
+    window.location.href = redirect(88996018788, message);
+  }
+
+  function redirect(num: number, product: string){
+    const params = {
+      baseURL: `https://web.whatsapp.com/send?`,
+      number: `phone=${num}`,
+      cart: `text=${encodeURI(product)}&app_absent=0`
+    }
+    
+    const url = `${params.baseURL}${params.number}${params.cart}`;
+
+    return url;
   }
 
   return (

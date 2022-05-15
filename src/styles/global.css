@@ -10,6 +10,10 @@ body {
   @apply bg-[#FFFF]
 }
 
+button {
+  -webkit-tap-highlight-color: transparent;
+}
+
 [disabled] {
   @apply cursor-not-allowed
 }
