@@ -13,10 +13,7 @@ export default function Home() {
   const [products, setProducts] = useState<ProductType[]>([]);
 
   useEffect(() => {
-    api.get("/")
-      .then(response => 
-        setProducts(response.data)
-      );
+    api.get("/").then(response => setProducts(response.data.products));
   }, []);
 
   return (

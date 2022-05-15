@@ -1,18 +1,19 @@
 import { useEffect, useState } from "react";
-import { 
-  MdAdd, 
-  MdEdit, 
-  MdRemove, 
-  MdSave 
-} from "react-icons/md";
+import { MdAdd, MdEdit, MdRemove, MdSave } from "react-icons/md";
+import { useCart } from "../context/CartContext";
+
 import { Header } from "../components/Header";
 
 export default function Products() {
-  const [currentPrice, setCurrentPrice] = useState<number>(250);
+  const {
+    cart,
+    addProductQuantity,
+    removeProductQuantity,
+    checkout
+  } = useCart();
+
   const [userAddress, setUserAddress] = useState<string>("");
   const [allowEditUserAddress, setAllowEditUserAddress] = useState<boolean>(false);
-
-  const priceByProduct = 250;
 
   useEffect(() => {
     const userAlreadyHasAddress = JSON.parse(localStorage.getItem("@address"));
@@ -21,15 +22,6 @@ export default function Products() {
       setUserAddress(userAlreadyHasAddress);
     }
   }, []);
-
-  function addItemInCart() {
-    setCurrentPrice(currentPrice + priceByProduct);
-  }
-
-  function removeItemFromCart() {
-    if (currentPrice <= 0) return;
-    setCurrentPrice(currentPrice - priceByProduct);
-  }
 
   function updateUserAddress() {
     if (allowEditUserAddress) {
@@ -46,10 +38,7 @@ export default function Products() {
       <div className="w-10/12 mx-auto flex mt-4 bg-gray-300 pl-1 pr-4 rounded-sm">
         <input
           type="text"
-          className={`
-            w-full py-2 px-4 mr-2 bg-transparent outline-none
-            ${!allowEditUserAddress && "cursor-not-allowed"}
-          `}
+          className="w-full py-2 px-4 mr-2 bg-transparent outline-none"
           disabled={!allowEditUserAddress}
           value={userAddress}
           onChange={e => setUserAddress(e.target.value)}
@@ -60,42 +49,61 @@ export default function Products() {
         </button>
       </div>
 
-      <main className="grid md:grid-cols-2 gap-4 w-10/12 mx-auto mt-4">
+      <main className="grid md:grid-cols-2 gap-4 w-10/12 mx-auto mt-8">
         <section>
-          <div className="flex items-center gap-2 bg-product rounded-lg p-4">
-            <img
-              src="/assets/product.svg"
-              alt="Logo do produto"
-              className="w-36 rounded-lg"
-            />
+          {cart.length > 0 ? (
+            cart.map(product => (
+              console.log(product),
 
-            <div className="flex justify-between w-full">
-              <div>
-                <strong className="text-base">Pizza de Chocolate</strong>
-                <p className="text-gray-400 text-sm">R${currentPrice}</p>
-                <p className="mt-4 text-primary font-bold text-base">2x R$ 250.00</p>
-              </div>
+              <div
+                key={product.id}
+                className="flex items-center gap-2 bg-product rounded-lg p-4 mb-2"
+              >
+                <img
+                  src="/assets/product.svg"
+                  alt="Logo do produto"
+                  className="w-32 rounded-lg"
+                />
 
-              <div className="flex flex-col gap-4 justify-center">
-                <button
-                  onClick={addItemInCart}
-                  className="bg-orange-200 flex justify-center items-center rounded-lg p-2 transition-all duration-200 hover:bg-orange-300"
-                >
-                  <MdAdd size={18} color="#A46254" />
-                </button>
-                <button
-                  onClick={removeItemFromCart}
-                  className="bg-orange-200 flex justify-center items-center rounded-lg p-2 transition-all duration-200 hover:bg-orange-300"
-                >
-                  <MdRemove size={18} color="#A46254"/>
-                </button>
+                <div className="flex justify-between w-full">
+                  <div>
+                    <strong className="text-base">{product.name}</strong>
+                    <p className="text-gray-400 text-sm">R$ {product.totalPrice}</p>
+                    <p className="mt-4 text-primary font-bold text-base">{product.quantity}x R$ {product.pricePerUnity}</p>
+                  </div>
+
+                  <div className="flex flex-col gap-4 justify-center">
+                    <button
+                      onClick={() => addProductQuantity(product.id)}
+                      className="bg-orange-200 flex justify-center items-center rounded-lg p-2 transition-all duration-200 hover:bg-orange-300"
+                    >
+                      <MdAdd size={18} color="#A46254" />
+                    </button>
+                    <button
+                      onClick={() => removeProductQuantity(product.id)}
+                      className="bg-orange-200 flex justify-center items-center rounded-lg p-2 transition-all duration-200 hover:bg-orange-300"
+                    >
+                      <MdRemove size={18} color="#A46254" />
+                    </button>
+                  </div>
+                </div>
               </div>
+            ))
+          ) : (
+            <div className="bg-gray-200 w-full h-72 rounded-lg flex justify-center items-center">
+              <strong>Nenhum item adicionado ao carrinho</strong>
             </div>
-          </div>
+          )}
         </section>
 
         <section>
-          <button className="bg-primary text-base text-white">Finalizar Compra</button>
+          <button
+            className="bg-primary text-base text-white"
+            disabled={cart.length <= 0}
+            onClick={checkout}
+          >
+            Finalizar Compra
+          </button>
         </section>
       </main>
     </>

@@ -9,3 +9,7 @@
 body {
   @apply bg-[#FFFF]
 }
+
+[disabled] {
+  @apply cursor-not-allowed
+}

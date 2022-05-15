@@ -6,16 +6,16 @@ interface ProductProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   product: Product
 }
 
-export function Product({product, ...props}: ProductProps) {
+export function Product({ product, ...props }: ProductProps) {
   return (
-    <button 
-      className="max-w-sm text-left" 
+    <button
+      className="max-w-sm text-left"
       {...props}
     >
-      <img 
+      <img
         src="assets/logo.svg"
-        alt="Bolo de chocolate" 
-        className="w-full rounded-2xl" 
+        alt="Bolo de chocolate"
+        className="w-full rounded-2xl"
       />
       <div>
         <div className="flex justify-between items-center">
@@ -28,7 +28,7 @@ export function Product({product, ...props}: ProductProps) {
           {product.description}
         </p>
         <small className="mt-3 text-sm flex items-center gap-2">
-          <FaUtensils color="#A3A3A4"/>
+          <FaUtensils color="#A3A3A4" />
           {product.category}
         </small>
       </div>
