@@ -11,7 +11,7 @@ export function makeServer() {
         products: [
           {
             id: "123dawd",
-            name: "Pizza de Calabera",
+            name: "Pizza de Calabreza",
             price: 20.0,
             description:
               "Uma deliciosa pizza de calabreza, recem retirada do forno a 20.000C, esperando apenas por você compra-la",
@@ -19,14 +19,14 @@ export function makeServer() {
           },
           {
             id: "123dagd",
-            name: "Bolo de Chocolat",
+            name: "Bolo de Chocolate",
             price: 25.0,
             description: "Delicioso bolo de chocolate",
             category: "Bolo",
           },
           {
             id: "123dawddd",
-            name: "Bolo de Chocolate",
+            name: "Bolo de Chocolate Red Wave",
             price: 25.0,
             description: "Delicioso bolo de chocolate",
             category: "Bolo",

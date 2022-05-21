@@ -1,14 +1,14 @@
 import Image from "next/image";
 import { useContext, useEffect, useState } from "react";
+
 import { api } from "../services/api";
 import { Product as ProductType } from "../types/Product";
-
-import { Product } from "../components/Product";
-import { Header } from "../components/Header";
 import { CartContext } from "../context/CartContext";
 
+import { Product } from "../components/Product";
+
 export default function Home() {
-  const { addProductToCart } = useContext(CartContext);
+  const { addProductToCart, cart } = useContext(CartContext);
 
   const [products, setProducts] = useState<ProductType[]>([]);
 
@@ -20,8 +20,6 @@ export default function Home() {
   return (
     <>
       <section className="bg-primary">
-        <Header />
-
         <div className="w-10/12 mx-auto flex flex-col lg:flex-row justify-between items-center py-19">
           <div>
             <h2 className="text-4xl sm:text-7xl text-white font-bold">
@@ -53,6 +51,7 @@ export default function Home() {
               product={product}
               key={product.id}
               onClick={() => addProductToCart(product.id)}
+              remove={cart.some(productCart => productCart.id === product.id)}
             />
           ))}
         </div>

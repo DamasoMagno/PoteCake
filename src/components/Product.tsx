@@ -1,13 +1,16 @@
 import { ButtonHTMLAttributes } from "react";
-import { FaUtensils } from "react-icons/fa"
-import { MdAddShoppingCart } from "react-icons/md"
+import { FaUtensils } from "react-icons/fa";
+import { MdAddShoppingCart, MdRemoveShoppingCart } from "react-icons/md";
+
 import { Product } from "../types/Product";
+import { formatCurrency } from "../utils/format";
 
 interface ProductProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   product: Product
+  remove: boolean;
 }
 
-export function Product({ product, ...props }: ProductProps) {
+export function Product({ product, remove, ...props }: ProductProps) {
   return (
     <div className="max-w-sm flex flex-col justify-between">
       <div>
@@ -46,10 +49,20 @@ export function Product({ product, ...props }: ProductProps) {
           "
           {...props}
         >
-          <MdAddShoppingCart />
-          Carrinho
+          {!remove ? (
+            <>
+              <MdAddShoppingCart />
+              Carrinho
+            </>
+
+          ) : (
+            <>
+              <MdRemoveShoppingCart />
+              Remover
+            </>
+          )}
         </button>
-        <strong>R${product.price}</strong>
+        <strong>{formatCurrency(product.price)}</strong>
       </div>
     </div>
   );

@@ -1,16 +1,11 @@
-import {
-  createContext,
-  ReactNode,
-  useContext,
-  useEffect,
-  useState
-} from "react";
+import { createContext, ReactNode, useContext, useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { toast } from "react-toastify";
 
 import { api } from "../services/api";
+import { formatCurrency } from "../utils/format";
+import { Product } from "../types/Product";
 
-type ProductCart = {
+export type ProductCart = {
   id: string;
   name: string;
   pricePerUnity: number;
@@ -19,11 +14,11 @@ type ProductCart = {
 }
 
 type CartContextProps = {
-  cart: ProductCart[]
-  addProductToCart: (id: string) => Promise<void>;
-  addProductQuantity: (id: string) => Promise<void>;
-  removeProductQuantity: (id: string) => Promise<void>;
-  checkout: () => void;
+  cart: ProductCart[];
+  addProductToCart(id: string): Promise<void>;
+  incrementProductAmount(id: string): Promise<void>;
+  decrementProductAmount(id: string): Promise<void>;
+  checkout(): void;
 }
 
 type CartProviderProps = {
@@ -45,77 +40,71 @@ export function CartProvider({ children }: CartProviderProps) {
     }
   }, []);
 
+  async function getProduct(id: string) {
+    const { data: { product } } = await api.get(`/${id}`);
+
+    const cartHasProduct = cart.findIndex(
+      productCard => productCard.id === product.id
+    );
+
+    return {
+      position: cartHasProduct,
+      product
+    }
+  }
+
   async function addProductToCart(id: string) {
     try {
-      const { data: { product } } = await api.get(`/${id}`);
-      const allProducts = [...cart];
+      const { position, product } = await getProduct(id);
 
-      const cartHasProduct = cart.findIndex(
-        productCard => productCard.id === product.id
-      );
-
-      if (cartHasProduct > -1) {
-        toast(`${product.name} já foi adicioando ao carrinho`);
+      if (position > -1) {
+        const products = cart.filter(productCard => productCard.id !== product.id);
+        setCart([...products]);
+        localStorage.setItem("@cart", JSON.stringify([...products]));
 
         return;
-      };
+      }
 
-      setCart(cart => [
-        ...cart,
-        {
-          id: product.id,
-          name: product.name,
-          pricePerUnity: product.price,
-          totalPrice: product.price * 1,
-          quantity: 1
-        }
-      ]);
+      const newProduct = {
+        id: product.id,
+        name: product.name,
+        pricePerUnity: product.price,
+        totalPrice: product.price * 1,
+        quantity: 1
+      }
 
-      localStorage.setItem("@cart", JSON.stringify(allProducts));
+      setCart(cart => [...cart, newProduct]);
 
-      router.push("/cart");
+      localStorage.setItem("@cart", JSON.stringify([...cart, newProduct]));
     } catch (error) {
       console.log(error);
     }
   }
 
-  async function addProductQuantity(id: string) {
+  async function incrementProductAmount(id: string) {
     try {
-      const { data: { product } } = await api.get(`/${id}`);
-      const allProducts = [...cart];
+      const { position } = await getProduct(id);
 
-      const productInCart = allProducts.findIndex(
-        productInCart => productInCart.id === product.id
-      );
+      cart[position].quantity += 1;
+      cart[position].totalPrice = cart[position].pricePerUnity * cart[position].quantity;
 
-      const products = allProducts[productInCart];
-      allProducts[productInCart].quantity = products.quantity + 1;
-      allProducts[productInCart].totalPrice = products.pricePerUnity * products.quantity;
+      setCart([...cart]);
 
-      setCart([...allProducts]);
-
-      localStorage.setItem("@cart", JSON.stringify(allProducts));
+      localStorage.setItem("@cart", JSON.stringify(cart));
     } catch (error) {
       console.log("Houve erro");
     }
   }
 
-  async function removeProductQuantity(id: string) {
+  async function decrementProductAmount(id: string) {
     try {
-      const { data: { product } } = await api.get(`/${id}`);
-      const allProducts = [...cart];
+      const { position } = await getProduct(id);
 
-      const productInCart = allProducts.findIndex(
-        productInCart => productInCart.id === product.id
-      );
+      cart[position].quantity -= 1;
 
-      const products = allProducts[productInCart];
-
-      allProducts[productInCart].quantity = products.quantity - 1;
-
-      if (allProducts[productInCart].quantity < 1) {
+      if (cart[position].quantity < 1) {
         const newCart = cart.filter(
-          currentProductsInCart => currentProductsInCart.id !== allProducts[productInCart].id
+          currentProductsInCart => currentProductsInCart.id !== cart[position].id
         );
 
         setCart(newCart);
@@ -125,11 +114,11 @@ export function CartProvider({ children }: CartProviderProps) {
         return;
       }
 
-      allProducts[productInCart].totalPrice = products.pricePerUnity * products.quantity;
+      cart[position].totalPrice = cart[position].pricePerUnity * cart[position].quantity;
 
-      setCart([...allProducts]);
+      setCart([...cart]);
 
-      localStorage.setItem("@cart", JSON.stringify(allProducts));
+      localStorage.setItem("@cart", JSON.stringify([...cart]));
     } catch (error) {
       console.log("Houve erro")
     }
@@ -139,28 +128,27 @@ export function CartProvider({ children }: CartProviderProps) {
     const userAddress = JSON.parse(localStorage.getItem("@address"));
 
     const message = `
-      endereço: ${userAddress}
-      \n
-      produto: ${JSON.stringify(cart.map(product => {
-      return {
-        nome: product.name
-      }
-    }))}
+      Endereço: ${userAddress}
+      
+      Descrição Pedidos 
+      ${cart.map(product => `${product.quantity}x ${product.name}  ${formatCurrency(product.totalPrice)}`)}
+
+      Total Pedido: ${`${formatCurrency(cart.reduce((acc, curent) => acc + curent.totalPrice, 0))}`}
     `;
+
+    location.href = redirect(88996018788, message);
 
     localStorage.setItem("@cart", JSON.stringify([]));
     setCart([]);
-
-    window.location.href = redirect(88996018788, message);
   }
 
-  function redirect(num: number, product: string){
+  function redirect(num: number, product: string) {
     const params = {
-      baseURL: `https://web.whatsapp.com/send?`,
-      number: `phone=${num}`,
+      baseURL: `https://api.whatsapp.com/send?`,
+      number: `phone=${num}&`,
       cart: `text=${encodeURI(product)}&app_absent=0`
     }
-    
+
     const url = `${params.baseURL}${params.number}${params.cart}`;
 
     return url;
@@ -170,8 +158,8 @@ export function CartProvider({ children }: CartProviderProps) {
     <CartContext.Provider value={{
       cart,
       addProductToCart,
-      addProductQuantity,
-      removeProductQuantity,
+      incrementProductAmount,
+      decrementProductAmount,
       checkout
     }}>
       {children}

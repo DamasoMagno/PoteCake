@@ -7,12 +7,14 @@ import { makeServer } from "../services/mirage";
 import "../styles/global.css";
 
 import 'react-toastify/dist/ReactToastify.css';
+import { Header } from "../components/Header";
 
 makeServer();
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <CartProvider>
+      <Header />
       <Component {...pageProps} />
       <ToastContainer/>
     </CartProvider>
