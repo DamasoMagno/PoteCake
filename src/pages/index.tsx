@@ -14,8 +14,18 @@ export default function Home() {
 
   useEffect(() => {
     api.get("/")
-      .then(response => setProducts(response.data.products));
+      .then(response => setProducts(response.data));
   }, []);
+
+  async function searchProductByCategory(category: string) {
+    try {
+      const products = await api.get(`/categories?category=${category}`);
+      console.log(products);
+      setProducts([...products.data])
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   return (
     <>
@@ -42,6 +52,12 @@ export default function Home() {
         </div>
       </section>
 
+      <select onChange={e => searchProductByCategory(e.target.value)}>
+        <option value="">Todos</option>
+        <option value="Bolo">Bolo</option>
+        <option value="Pizza">Pizza</option>
+      </select>
+
       <main className="mx-auto my-8 w-10/12">
         <h2 className="text-2xl font-bold">Nosso Cardápio</h2>
 
@@ -51,7 +67,6 @@ export default function Home() {
               product={product}
               key={product.id}
               onClick={() => addProductToCart(product.id)}
-              remove={cart.some(productCart => productCart.id === product.id)}
             />
           ))}
         </div>

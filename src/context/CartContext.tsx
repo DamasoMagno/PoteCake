@@ -1,9 +1,8 @@
 import { createContext, ReactNode, useContext, useEffect, useState } from "react";
-import { useRouter } from "next/router";
 
 import { api } from "../services/api";
 import { formatCurrency } from "../utils/format";
-import { Product } from "../types/Product";
+import { messageAlert } from "../utils/messageAlert";
 
 export type ProductCart = {
   id: string;
@@ -28,8 +27,6 @@ type CartProviderProps = {
 export const CartContext = createContext({} as CartContextProps);
 
 export function CartProvider({ children }: CartProviderProps) {
-  const router = useRouter();
-
   const [cart, setCart] = useState<ProductCart[]>([]);
 
   useEffect(() => {
@@ -43,12 +40,12 @@ export function CartProvider({ children }: CartProviderProps) {
   async function getProduct(id: string) {
     const { data: { product } } = await api.get(`/${id}`);
 
-    const cartHasProduct = cart.findIndex(
+    const productFound = cart.findIndex(
       productCard => productCard.id === product.id
     );
 
     return {
-      position: cartHasProduct,
+      position: productFound,
       product
     }
   }
@@ -60,6 +57,9 @@ export function CartProvider({ children }: CartProviderProps) {
       if (position > -1) {
         const products = cart.filter(productCard => productCard.id !== product.id);
         setCart([...products]);
+
+        messageAlert("Produto removido do carrinho");
+
         localStorage.setItem("@cart", JSON.stringify([...products]));
 
         return;
@@ -74,6 +74,8 @@ export function CartProvider({ children }: CartProviderProps) {
       }
 
       setCart(cart => [...cart, newProduct]);
+
+      messageAlert("Produto adicionad ao carrinho");
 
       localStorage.setItem("@cart", JSON.stringify([...cart, newProduct]));
     } catch (error) {

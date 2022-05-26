@@ -13,7 +13,6 @@ export default function Products() {
   } = useCart();
 
   const [userAddress, setUserAddress] = useState<string>("");
-  const [allowEditUserAddress, setAllowEditUserAddress] = useState<boolean>(false);
 
   useEffect(() => {
     const userAlreadyHasAddress = JSON.parse(localStorage.getItem("@address"));
@@ -24,27 +23,18 @@ export default function Products() {
   }, []);
 
   function updateUserAddress() {
-    if (allowEditUserAddress) {
-      localStorage.setItem("@address", JSON.stringify(userAddress));
-    }
-
-    setAllowEditUserAddress(!allowEditUserAddress);
+    localStorage.setItem("@address", JSON.stringify(userAddress));
   }
 
   return (
     <>
-      <div className="w-10/12 mx-auto flex mt-4 bg-gray-300 pl-1 pr-4 rounded-sm">
+      <div className="w-10/12 mx-auto">
         <input
           type="text"
-          className="w-full py-2 px-4 mr-2 bg-transparent outline-none"
-          disabled={!allowEditUserAddress}
+          className="w-full py-2 px-4 mr-2 bg-transparent border-2 focus:border-red-500"
           value={userAddress}
           onChange={e => setUserAddress(e.target.value)}
         />
-
-        <button onClick={updateUserAddress}>
-          {allowEditUserAddress ? <MdSave /> : <MdEdit />}
-        </button>
       </div>
 
       <main className="grid md:grid-cols-2 gap-4 w-10/12 mx-auto mt-8">
@@ -116,17 +106,14 @@ export default function Products() {
           )}
         </section>
 
-        <section className="bg-product order-1 md:order-2 px-4 py-8">
-          <div>
-            <button
-              className="bg-primary text-base text-white rounded-4 w-full py-2 rounded-lg"
-              disabled={cart.length <= 0}
-              onClick={checkout}
-            >
-              Finalizar Compra
-            </button>
-            <span>Esteja ciente que se você concluir o pedido, o carrinho será desfeito</span>
-          </div>
+        <section className="bg-product order-1 md:order-2 px-4 py-4">
+          <button
+            className="bg-primary text-base text-white rounded-4 w-full py-2 rounded-lg"
+            disabled={cart.length <= 0}
+            onClick={checkout}
+          >
+            Finalizar Compra
+          </button>
 
           <div className="my-8">
             <h3 className="mb-1">Descrição Pedidos</h3>

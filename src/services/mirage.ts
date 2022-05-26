@@ -15,7 +15,7 @@ export function makeServer() {
             price: 20.0,
             description:
               "Uma deliciosa pizza de calabreza, recem retirada do forno a 20.000C, esperando apenas por você compra-la",
-            category: "Bolo",
+            category: "Pizza",
           },
           {
             id: "123dagd",
@@ -39,10 +39,20 @@ export function makeServer() {
       this.namespace = '/api',
 
       this.get("/products", () => {
-        return this.schema.all("product");
+        return this.db.products;
       });
 
       this.get("/products/:id");
+
+      this.get("/products/categories", (schema, request) => {
+        const category = request.queryParams.category;
+
+        if(!category){
+          return this.db.products;
+        }
+
+        return this.db.products.where({ category });
+      })
 
       this.namespace = "";
       

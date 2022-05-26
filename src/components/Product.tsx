@@ -1,16 +1,31 @@
-import { ButtonHTMLAttributes } from "react";
+import { ButtonHTMLAttributes, useEffect, useState } from "react";
 import { FaUtensils } from "react-icons/fa";
 import { MdAddShoppingCart, MdRemoveShoppingCart } from "react-icons/md";
+import { useCart } from "../context/CartContext";
 
 import { Product } from "../types/Product";
 import { formatCurrency } from "../utils/format";
-
 interface ProductProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   product: Product
-  remove: boolean;
 }
 
-export function Product({ product, remove, ...props }: ProductProps) {
+export function Product({ product, ...props }: ProductProps) {
+  const { cart } = useCart();
+
+  const [productInCart, setProductInCart] = useState(false);
+
+  useEffect(() => {
+    const productAlreadyInsertedInCart = cart.some(
+      productInCart => productInCart.id === product.id
+    );
+
+    if (productAlreadyInsertedInCart) {
+      setProductInCart(true);
+    } else {
+      setProductInCart(false);
+    }
+  }, [cart]);
+
   return (
     <div className="max-w-sm flex flex-col justify-between">
       <div>
@@ -49,12 +64,12 @@ export function Product({ product, remove, ...props }: ProductProps) {
           "
           {...props}
         >
-          {!remove ? (
+          {!productInCart ? 
+          (
             <>
               <MdAddShoppingCart />
               Carrinho
             </>
-
           ) : (
             <>
               <MdRemoveShoppingCart />
