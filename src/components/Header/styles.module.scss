@@ -1,0 +1,20 @@
+.headerContainer {
+  width: 100%;
+  background-color: var(--brown-700);
+
+  nav {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    margin: 0 auto;
+    padding: 1rem 0;
+    gap: 1rem;
+    width: 90%;
+
+    li {
+      list-style: none;
+      color: #FFF;
+      font-size: 1.25rem;
+    }
+  }
+}

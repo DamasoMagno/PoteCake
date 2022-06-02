@@ -1,0 +1,42 @@
+:root {
+  --brown-900: #7E392A;
+  --brown-700: #A46254;
+  
+  --white-800: #F5F5F5;
+  --white: #FFFF;
+}
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: "Roboto", sans-serif;
+}
+
+html {
+  @media(max-width: 1024px){
+    font-size: 95.7%;
+  }
+
+  @media(max-width: 768px){
+    font-size: 87.5%;
+  }
+}
+
+body {
+  background: #FFF;
+}
+
+a {
+  text-decoration: none;
+}
+
+button {
+  -webkit-tap-highlight-color: transparent;
+  cursor: pointer;
+}
+
+[disabled] {
+  cursor: not-allowed;
+  opacity: .5;
+}

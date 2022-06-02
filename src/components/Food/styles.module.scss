@@ -1,0 +1,68 @@
+.foodCartContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  .foodImage {
+    width: 100%;
+  }
+
+  .foodInfo {
+    height: 100%;
+    padding: .3rem .5rem 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    .description {
+      h3 {
+        font-size: 1.25rem;
+        font-weight: bold;
+        color: #182135;
+      }
+
+      p {
+        font-size: .9rem;
+        margin-top: 0.5rem;
+        line-height: 1.25rem;
+        text-align: justify;
+        color: rgba(98, 98, 100, 0.5);
+      }
+
+      small {
+        margin: .8rem 0 1.2rem;
+        font-size: 0.85rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: rgba(98, 98, 100, 0.5);
+      }
+    }
+
+    .price {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      button {
+        border: 0;
+        font-size: 1rem;
+        display: flex;
+        align-items: center;
+        background-color: var(--brown-700);
+        font-weight: 700;
+        border-radius: 0.25rem;
+        padding: .5rem .85rem;
+        color: #fff;
+
+        svg {
+          margin-right: 0.25rem;
+        }
+      }
+
+      strong {
+        color: #503E9D;
+      }
+    }
+  }
+}

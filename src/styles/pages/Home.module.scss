@@ -1,0 +1,72 @@
+.heroContainer {
+  background-color: var(--brown-700);
+
+  .content {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: space-between;
+    margin: 0 auto;
+    max-width: 77.87rem;
+    padding: 3.5rem 1rem;
+
+    @media (min-width: 728px) {
+      flex-direction: row;
+    }
+
+    h2 {
+      font-size: 3.1rem;
+      line-height: 3.5rem;
+      color: #fff;
+      font-weight: bold;
+
+      strong {
+        display: block;
+        color: var(--brown-900);
+      }
+    }
+
+    p {
+      margin-top: 1.5rem;
+      line-height: 2rem;
+      color: var(--white);
+      font-size: 1.25rem;
+      max-width: 400px;
+    }
+  }
+}
+
+.menu {
+  max-width: 77.87rem;
+  padding: 0 1rem;
+  margin: 3rem auto; 
+
+  h2 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+
+    span {
+      background: var(--brown-700);
+      display: block;
+      height: 1em;
+      width: 10px;
+      margin-right: .25rem;
+    }
+  }
+
+  .products {
+    margin: 2rem 0;
+    display: grid;
+    gap: 3rem;
+
+    @media(min-width: 728px){
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    @media (min-width: 1024px) {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+}

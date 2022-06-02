@@ -135,7 +135,9 @@ export function CartProvider({ children }: CartProviderProps) {
       Descrição Pedidos 
       ${cart.map(product => `${product.quantity}x ${product.name}  ${formatCurrency(product.totalPrice)}`)}
 
-      Total Pedido: ${`${formatCurrency(cart.reduce((acc, curent) => acc + curent.totalPrice, 0))}`}
+      Total Pedido: ${`${formatCurrency(
+        cart.reduce((acc, curent) => acc + curent.totalPrice, 0)
+      )}`}
     `;
 
     location.href = redirect(88996018788, message);

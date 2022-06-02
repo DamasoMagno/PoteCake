@@ -1,0 +1,148 @@
+.userAddressContainer {
+  margin: 0 auto;
+
+  input {
+    flex: 1;
+    padding: 0.5rem 1rem;
+    margin-right: 0.5rem;
+    background: transparent;
+    border: 1px solid transparent;
+
+    :focus {
+      border: 1px solid red;
+    }
+  }
+}
+
+.cart {
+  margin: 2rem auto 0;
+  max-width: 1100px;
+  width: 90%;
+  margin: 2rem auto;
+  display: grid;
+  align-items: flex-start;
+
+  @media (min-width: 728px) {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 3rem;
+  }
+
+  .products {
+    h3 {
+      margin-bottom: 1rem;
+    }
+
+    .product {
+      display: flex;
+      align-items: center;
+      background-color: var(--white-800);
+      border-radius: 0.5rem;
+      padding: 1rem 0.85rem;
+      margin-bottom: 0.5rem;
+
+      img {
+        width: 8rem;
+        margin-right: 0.5rem;
+        border-radius: 0.25rem;
+      }
+
+      .productInfo {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+
+        .description {
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+
+          strong {
+            font-size: 1rem;
+          }
+
+          p {
+            &:nth-child(2) {
+              color: gray;
+              font-size: 0.8rem;
+            }
+
+            &:nth-child(3) {
+              margin-top: 1;
+              color: var(--brown-900);
+              font-weight: bold;
+              font-size: 1rem;
+            }
+          }
+        }
+
+        .cartControlls {
+          display: flex;
+          flex-direction: column;
+          gap: 1rem;
+          justify-content: center;
+
+          button {
+            background-color: var(--brown-700);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 0.5rem;
+            border: 0;
+            padding: 0.5rem;
+            transition: all 0.2s;
+
+            svg {
+              color: #fff;
+            }
+
+            :hover {
+              filter: brightness(0.9);
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .cartData {
+    background: var(--white-800);
+    padding: 1rem;
+    order: 0;
+
+    @media (min-width: 728px) {
+      order: 1;
+    }
+
+    .finishCart {
+      background: var(--brown-700);
+      color: #ffff;
+      border: 0;
+      border-radius: 0.5rem;
+      font-size: 1rem;
+      padding: 0.5rem 0;
+      width: 100%;
+    }
+
+    .foodPrices {
+      margin-top: 2rem;
+
+      h3 {
+        margin-bottom: 0.25rem;
+      }
+
+      li {
+        list-style: none;
+        flex: 1;
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 0.5rem;
+      }
+    }
+
+    .foodTotalPrices {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+  }
+}

@@ -21,14 +21,16 @@ export function makeServer() {
             id: "123dagd",
             name: "Bolo de Chocolate",
             price: 25.0,
-            description: "Delicioso bolo de chocolate",
+            description:
+              "Uma deliciosa pizza de calabreza, recem retirada do forno a 20.000C, esperando apenas por você compra-la",
             category: "Bolo",
           },
           {
             id: "123dawddd",
             name: "Bolo de Chocolate Red Wave",
             price: 25.0,
-            description: "Delicioso bolo de chocolate",
+            description:
+              "Uma deliciosa pizza de calabreza, recem retirada do forno a 20.000C, esperando apenas por você compra-la",
             category: "Bolo",
           },
         ],
@@ -38,9 +40,7 @@ export function makeServer() {
     routes() {
       this.namespace = '/api',
 
-      this.get("/products", () => {
-        return this.db.products;
-      });
+      this.get("/products", () => this.db.products );
 
       this.get("/products/:id");
 

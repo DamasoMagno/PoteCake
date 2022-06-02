@@ -2,12 +2,12 @@ import { AppProps } from "next/app";
 import { ToastContainer } from "react-toastify";
 
 import { CartProvider } from "../context/CartContext";
-import { makeServer } from "../services/mirage";
+import { Header } from "../components/Header";
 
-import "../styles/global.css";
+import "../styles/global.scss";
 
 import 'react-toastify/dist/ReactToastify.css';
-import { Header } from "../components/Header";
+import { makeServer } from "../services/mirage";
 
 makeServer();
 

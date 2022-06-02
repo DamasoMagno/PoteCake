@@ -5,10 +5,12 @@ import { api } from "../services/api";
 import { Product as ProductType } from "../types/Product";
 import { CartContext } from "../context/CartContext";
 
-import { Product } from "../components/Product";
+import { Product } from "../components/Food";
+
+import styles from "../styles/pages/Home.module.scss";
 
 export default function Home() {
-  const { addProductToCart, cart } = useContext(CartContext);
+  const { addProductToCart } = useContext(CartContext);
 
   const [products, setProducts] = useState<ProductType[]>([]);
 
@@ -20,7 +22,6 @@ export default function Home() {
   async function searchProductByCategory(category: string) {
     try {
       const products = await api.get(`/categories?category=${category}`);
-      console.log(products);
       setProducts([...products.data])
     } catch (error) {
       console.log(error);
@@ -29,16 +30,16 @@ export default function Home() {
 
   return (
     <>
-      <section className="bg-primary">
-        <div className="w-10/12 mx-auto flex flex-col lg:flex-row justify-between items-center py-19">
+      <section className={styles.heroContainer}>
+        <div className={styles.content}>
           <div>
-            <h2 className="text-4xl sm:text-7xl text-white font-bold">
+            <h2>
               A confeitaria da
-              <strong className="block text-orange-700">
+              <strong>
                 Vizinhança
               </strong>
             </h2>
-            <p className="mt-8 leading-6 text-gray-300 text-lg sm:text-xl max-w-sm">
+            <p>
               Na potecake, priorizamos a boa experiência
               de nossos clientes, com nossas comdias
             </p>
@@ -46,22 +47,19 @@ export default function Home() {
           <Image
             src="/assets/logo.svg"
             alt="Imagem de um bolo de chocolate"
-            width="400px"
-            height="400px"
+            width="350px"
+            height="300px"
           />
         </div>
       </section>
 
-      <select onChange={e => searchProductByCategory(e.target.value)}>
-        <option value="">Todos</option>
-        <option value="Bolo">Bolo</option>
-        <option value="Pizza">Pizza</option>
-      </select>
+      <main className={styles.menu}>
+        <h2>
+          <span/>
+          Nosso Cardápio
+        </h2>
 
-      <main className="mx-auto my-8 w-10/12">
-        <h2 className="text-2xl font-bold">Nosso Cardápio</h2>
-
-        <div className="mt-4 grid gap-12 md:grid-cols-2 xl:grid-cols-4">
+        <div className={styles.products}>
           {products.map(product => (
             <Product
               product={product}
