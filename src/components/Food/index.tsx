@@ -1,5 +1,4 @@
 import { ButtonHTMLAttributes, useEffect, useState } from "react";
-import { FaUtensils } from "react-icons/fa";
 import { MdRemoveShoppingCart } from "react-icons/md";
 import { FiShoppingCart } from "react-icons/fi";
 
@@ -65,7 +64,7 @@ export function Food({ food, ...props }: FoodProps) {
                 </>
               )}
           </button>
-          <strong>{formatCurrency(food.price)}</strong>
+          <strong>{formatCurrency(Number(food.price))}</strong>
         </div>
       </div>
     </div>
