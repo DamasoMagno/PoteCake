@@ -9,6 +9,7 @@ export default function MyDocument() {
         <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet" />
 
         <meta name="description" content="Nossa plataforma de venda de doces" />
+        <link rel="shortcut icon" href="/assets/logo.svg" />
       </Head>
 
       <body>

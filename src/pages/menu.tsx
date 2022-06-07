@@ -1,58 +1,115 @@
-import { useEffect, useState } from "react";
-import { MdArrowBackIos, MdArrowDownward, MdArrowDropDown, MdArrowForward, MdSearch } from "react-icons/md";
-import { Product } from "../components/Food";
+import Head from "next/head";
+import { ChangeEvent, useState } from "react";
+import { MdSearch, MdArrowDropDown } from "react-icons/md";
+
+import { CategoriesDocument, ProductsDocument } from "src/generated/graphql";
 import { useCart } from "../context/CartContext";
-import { api } from "../services/api";
+import { client } from "src/libs/apollo";
 
-import { Product as ProductType } from "../types/Product";
+import { Food } from "@component/Food";
+import { SectionTitle } from "@component/SectionTitle";
 
-import styles from "../styles/pages/Menu.module.scss";
+import styles from "@styles/pages/Menu.module.scss";
+import { gql } from "@apollo/client";
 
-export default function Menu() {
+export default function Menu({ foods, categories }: any) {
   const { addProductToCart } = useCart();
 
-  const [products, setProducts] = useState<ProductType[]>([]);
+  const [products, setProducts] = useState(foods);
+  const [categoriesN, setCategories] = useState(categories);
 
-  useEffect(() => {
-    api.get("/")
-      .then(response => setProducts(response.data));
-  }, []);
+  async function searchProduct(event: ChangeEvent<HTMLSelectElement>) {
+    const category = event.target.value;
 
-  async function searchProductByCategory(category: string) {
     try {
-      const products = await api.get(`/categories?category=${category}`);
-      setProducts([...products.data])
+      if (!category) return;
+
+      const data = await client.query({
+        query: gql`{
+          products(
+            where: { 
+              categories_some: {
+                slug: "${category}"
+              } 
+            }
+          ){
+            id
+            image {
+              url
+            }
+            name
+            description
+            price
+          }
+        }`
+      });
+
+      setProducts([...data.data.products])
     } catch (error) {
-      console.log(error);
+
     }
   }
 
   return (
     <>
+      <Head>
+        <title>PoteCake - Cardápio</title>
+      </Head>
+
       <main className={styles.container}>
-        <section className={styles.filterOptionsContainer}>
-          <div>
-            <input placeholder="Procurar produto"/>
-            <MdSearch size={24}/>
+        <section className={styles.filterFoods}>
+          <div className={styles.search}>
+            <MdSearch size={24} />
+            <input placeholder="Procurar produto" />
           </div>
-          <div>
-            <select>
-              <option>Bolo</option>
+
+          <div className={styles.filter}>
+            <select onChange={searchProduct}>
+              <option value="">Todos</option>
+              {categoriesN.map(category => (
+                <option
+                  value={category.name}
+                  key={category.id}
+                >
+                  {category.name}
+                </option>
+              ))}
             </select>
-            <MdArrowDropDown size={24}/>
+            <MdArrowDropDown size={32} />
           </div>
         </section>
 
-        <section className={styles.productsContainer}>
-          {products.map(product => (
-            <Product
-              product={product}
-              key={product.id}
-              onClick={() => addProductToCart(product.id)}
-            />
-          ))}
+        <section className={styles.menu}>
+          <SectionTitle>Todos</SectionTitle>
+
+          <div className={styles.foods}>
+            {products.map(food => (
+              <Food
+                food={food}
+                key={food.id}
+                onClick={() => addProductToCart(food.id)}
+              />
+            ))}
+          </div>
         </section>
       </main>
     </>
   );
+}
+
+export const getServerSideProps = async ({ ctx }) => {
+  const { data: { products } } = await client.query({
+    query: ProductsDocument,
+  });
+
+  const { data: { categories } } = await client.query({
+    query: CategoriesDocument
+  })
+
+  return {
+    props: {
+      foods: products,
+      categories: categories
+    }
+  }
 }

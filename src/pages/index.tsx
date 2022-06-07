@@ -1,36 +1,26 @@
+import Head from "next/head";
 import Image from "next/image";
-import { useContext, useEffect, useState } from "react";
 
-import { api } from "../services/api";
-import { Product as ProductType } from "../types/Product";
-import { CartContext } from "../context/CartContext";
+import { client } from "src/libs/apollo";
+import { useCart } from "../context/CartContext";
+import { ProductsDocument } from "../generated/graphql";
+import { ProductsQuery } from "../types/FoodQuery";
 
-import { Product } from "../components/Food";
+import { Food } from "@component/Food";
+import { SectionTitle } from "@component/SectionTitle";
 
-import styles from "../styles/pages/Home.module.scss";
+import styles from "@styles/pages/Home.module.scss";
 
-export default function Home() {
-  const { addProductToCart } = useContext(CartContext);
-
-  const [products, setProducts] = useState<ProductType[]>([]);
-
-  useEffect(() => {
-    api.get("/")
-      .then(response => setProducts(response.data));
-  }, []);
-
-  async function searchProductByCategory(category: string) {
-    try {
-      const products = await api.get(`/categories?category=${category}`);
-      setProducts([...products.data])
-    } catch (error) {
-      console.log(error);
-    }
-  }
+export default function Home({ foods }: ProductsQuery) {
+  const { addProductToCart } = useCart();
 
   return (
     <>
-      <section className={styles.heroContainer}>
+      <Head>
+        <title>PoteCake</title>
+      </Head>
+
+      <section className={styles.hero}>
         <div className={styles.content}>
           <div>
             <h2>
@@ -40,35 +30,44 @@ export default function Home() {
               </strong>
             </h2>
             <p>
-              Na potecake, priorizamos a boa experiência
-              de nossos clientes, com nossas comdias
+              Priorizamos a boa experiência
+              de nossos clientes, com nossas comidas
             </p>
           </div>
           <Image
             src="/assets/logo.svg"
             alt="Imagem de um bolo de chocolate"
-            width="350px"
+            width="400px"
             height="300px"
           />
         </div>
       </section>
 
       <main className={styles.menu}>
-        <h2>
-          <span/>
-          Nosso Cardápio
-        </h2>
+        <SectionTitle>Nosso Cardápio</SectionTitle>
 
         <div className={styles.products}>
-          {products.map(product => (
-            <Product
-              product={product}
-              key={product.id}
-              onClick={() => addProductToCart(product.id)}
+          {foods.map(food => (
+            <Food
+              food={food}
+              key={food.id}
+              onClick={() => addProductToCart(food.id)}
             />
           ))}
         </div>
       </main>
     </>
   );
+}
+
+export const getServerSideProps = async () => {
+  const { data } = await client.query({
+    query: ProductsDocument
+  });
+
+  return {
+    props: {
+      foods: data.products
+    }
+  }
 }

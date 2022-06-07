@@ -1,51 +1,58 @@
 import { ButtonHTMLAttributes, useEffect, useState } from "react";
 import { FaUtensils } from "react-icons/fa";
-import { MdAddShoppingCart, MdRemoveShoppingCart } from "react-icons/md";
+import { MdRemoveShoppingCart } from "react-icons/md";
 import { FiShoppingCart } from "react-icons/fi";
-import { useCart } from "../../context/CartContext";
 
-import { Product } from "../../types/Product";
-import { formatCurrency } from "../../utils/format";
-interface ProductProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  product: Product
+import { useCart } from "../../context/CartContext";
+import { FoodType } from "../../types/Food";
+import { formatCurrency } from "../../utils/formatCurrency";
+
+interface FoodProps
+  extends ButtonHTMLAttributes<HTMLButtonElement> {
+  food: Omit<FoodType, "category">;
 }
 
 import styles from "./styles.module.scss";
 
-export function Product({ product, ...props }: ProductProps) {
+export function Food({ food, ...props }: FoodProps) {
   const { cart } = useCart();
 
-  const [productInCart, setProductInCart] = useState(false);
+  const [foodHasInCart, setFoodhasInCart] = useState(false);
 
   useEffect(() => {
     const productAlreadyInsertedInCart = cart.some(
-      productInCart => productInCart.id === product.id
+      foodCart => foodCart.id === food.id
     );
 
     if (productAlreadyInsertedInCart) {
-      setProductInCart(true);
+      setFoodhasInCart(true);
     } else {
-      setProductInCart(false);
+      setFoodhasInCart(false);
     }
   }, [cart]);
 
   return (
     <div className={styles.foodCartContainer}>
-      <img src="assets/product.svg" className={styles.foodImage}/>
-      
+      <img src="assets/product.svg" className={styles.foodImage} />
+
       <div className={styles.foodInfo}>
         <div className={styles.description}>
-          <h3>{product.name}</h3>
-          <p>{product.description}</p>
+          <h3>{food.name}</h3>
+          <p>{food.description}</p>
+          { /* 
           <small>
-            <FaUtensils color="#A3A3A4" />
-            {product.category}
-          </small>
+            <FaUtensils />
+            {food.category}
+          </small>*/ }
+
         </div>
 
         <div className={styles.price}>
-          <button {...props}>
-            {!productInCart ?
+          <button
+            className={foodHasInCart ? styles.remove : null}
+            {...props}
+          >
+            {!foodHasInCart ?
               (
                 <>
                   <FiShoppingCart />
@@ -58,7 +65,7 @@ export function Product({ product, ...props }: ProductProps) {
                 </>
               )}
           </button>
-          <strong>{formatCurrency(product.price)}</strong>
+          <strong>{formatCurrency(food.price)}</strong>
         </div>
       </div>
     </div>

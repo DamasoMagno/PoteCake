@@ -1,7 +1,15 @@
-import { createContext, ReactNode, useContext, useEffect, useState } from "react";
+import {
+  createContext,
+  ReactNode,
+  useContext,
+  useEffect,
+  useState
+} from "react";
+import { gql } from "@apollo/client";
 
-import { api } from "../services/api";
-import { formatCurrency } from "../utils/format";
+import { client } from "src/libs/apollo";
+
+import { formatCurrency } from "../utils/formatCurrency";
 import { messageAlert } from "../utils/messageAlert";
 
 export type ProductCart = {
@@ -32,13 +40,25 @@ export function CartProvider({ children }: CartProviderProps) {
   useEffect(() => {
     const productsInCart = JSON.parse(localStorage.getItem("@cart"));
 
-    if (productsInCart) {
-      setCart([...productsInCart]);
-    }
+    if (!productsInCart) return;
+
+    setCart([...productsInCart]);
   }, []);
 
   async function getProduct(id: string) {
-    const { data: { product } } = await api.get(`/${id}`);
+    const { data: { product } } = await client.query({
+      query: gql`{
+        product ( where: { id: "${id}" } ) {
+         id
+         image {
+           url
+         }
+         name
+         description
+         price
+       }
+     }`
+    })
 
     const productFound = cart.findIndex(
       productCard => productCard.id === product.id
@@ -127,17 +147,23 @@ export function CartProvider({ children }: CartProviderProps) {
   }
 
   function checkout() {
-    const userAddress = JSON.parse(localStorage.getItem("@address"));
+    const user = JSON.parse(localStorage.getItem("@user"));
 
     const message = `
-      Endereço: ${userAddress}
+      Nome: ${user.name}
+
+      Rua: ${user.address.name} 
+      Número: ${user.address.number}
       
       Descrição Pedidos 
-      ${cart.map(product => `${product.quantity}x ${product.name}  ${formatCurrency(product.totalPrice)}`)}
+      ${cart.map(product => {
+      return `${product.quantity}x ${product.name}  ${formatCurrency(product.totalPrice)}`
+    })}
 
-      Total Pedido: ${`${formatCurrency(
-        cart.reduce((acc, curent) => acc + curent.totalPrice, 0)
-      )}`}
+      Total Pedido: 
+      ${formatCurrency(
+      cart.reduce((acc, curent) => acc + curent.totalPrice, 0)
+    )}
     `;
 
     location.href = redirect(88996018788, message);
@@ -171,6 +197,4 @@ export function CartProvider({ children }: CartProviderProps) {
   );
 }
 
-export function useCart() {
-  return useContext(CartContext);
-}
+export const useCart = () => useContext(CartContext);

@@ -1,4 +1,4 @@
-.heroContainer {
+.hero {
   background-color: var(--brown-700);
 
   .content {
@@ -7,31 +7,42 @@
     flex-direction: column;
     justify-content: space-between;
     margin: 0 auto;
-    max-width: 77.87rem;
-    padding: 3.5rem 1rem;
+    max-width: 77rem;
+    padding: 3rem 1rem;
 
-    @media (min-width: 728px) {
-      flex-direction: row;
-    }
+    div {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      text-align: center;
 
-    h2 {
-      font-size: 3.1rem;
-      line-height: 3.5rem;
-      color: #fff;
-      font-weight: bold;
+      h2 {
+        font-size: 2.5rem;
+        line-height: 3rem;
+        color: #fff;
+        font-weight: bold;
 
-      strong {
-        display: block;
-        color: var(--brown-900);
+        strong {
+          font-size: 3rem;
+          display: block;
+          color: var(--brown-900);
+        }
+      }
+
+      p {
+        line-height: 1.85rem;
+        color: var(--white);
+        font-size: 1.25rem;
+        max-width: 350px;
       }
     }
 
-    p {
-      margin-top: 1.5rem;
-      line-height: 2rem;
-      color: var(--white);
-      font-size: 1.25rem;
-      max-width: 400px;
+    @media (min-width: 768px) {
+      flex-direction: row;
+
+      div {
+        text-align: left;
+      }
     }
   }
 }
@@ -39,34 +50,29 @@
 .menu {
   max-width: 77.87rem;
   padding: 0 1rem;
-  margin: 3rem auto; 
-
-  h2 {
-    font-size: 1.5rem;
-    font-weight: bold;
-    display: flex;
-    align-items: center;
-
-    span {
-      background: var(--brown-700);
-      display: block;
-      height: 1em;
-      width: 10px;
-      margin-right: .25rem;
-    }
-  }
+  margin: 3rem auto;
 
   .products {
-    margin: 2rem 0;
+    margin: 2rem auto;
     display: grid;
     gap: 3rem;
 
-    @media(min-width: 728px){
+    @media (min-width: 728px) {
       grid-template-columns: repeat(2, 1fr);
     }
 
     @media (min-width: 1024px) {
       grid-template-columns: repeat(3, 1fr);
     }
+  }
+}
+
+.joinUs {
+  background-color: #f5f5f5;
+
+  .joinContent {
+    max-width: 77.87rem;
+    padding: 0 1rem;
+    margin: 0 auto;
   }
 }

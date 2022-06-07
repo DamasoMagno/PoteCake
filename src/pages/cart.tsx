@@ -1,10 +1,15 @@
-import { useEffect, useRef, useState } from "react";
+import Head from "next/head";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
+import axios from "axios";
 import { MdAdd, MdDelete, MdRemove } from "react-icons/md";
-import { useCart } from "../context/CartContext";
-import styles from "../styles/pages/Cart.module.scss";
 
-import { formatCurrency } from "../utils/format";
-import { messageAlert } from "../utils/messageAlert";
+import { messageAlert } from "src/utils/messageAlert";
+import { useCart } from "../context/CartContext";
+import { formatCurrency } from "../utils/formatCurrency";
+
+import { Input } from "@component/Input";
+
+import styles from "@styles/pages/Cart.module.scss";
 
 export default function Products() {
   const {
@@ -14,55 +19,123 @@ export default function Products() {
     checkout
   } = useCart();
 
-  const addressRef = useRef<HTMLInputElement>(null);
-  const [userAddress, setUserAddress] = useState<string>("");
+  const userName = useRef<HTMLInputElement>(null);
+  const userLastName = useRef<HTMLInputElement>(null);
+
+  const userAddressNumber = useRef<HTMLInputElement>(null);
+  const userAddress = useRef<HTMLInputElement>(null);
+  const userCEP = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    const userAlreadyHasAddress = JSON.parse(localStorage.getItem("@address"));
+    const user = JSON.parse(localStorage.getItem("@user"));
 
-    if (userAlreadyHasAddress) {
-      setUserAddress(userAlreadyHasAddress);
-    }
+    if (!user) return;
+
+    userName.current.value = user.name;
+    userLastName.current.value = user.lastName;
+    userAddressNumber.current.value = user.address.number;
+    userAddress.current.value = user.address.name;
+    userCEP.current.value = user.address.cep;
   }, []);
 
-  function updateUserAddress() {
-    localStorage.setItem("@address", JSON.stringify(userAddress));
+  async function getUserAddress(event: ChangeEvent<HTMLInputElement>) {
+    try {
+      const { data } = await axios.get(`https://viacep.com.br/ws/${event.target.value}/json/`);
+
+      if (data.localidade !== "Itapipoca") {
+        return messageAlert("Não entregamos fora de itapipoca");
+      }
+
+      userAddress.current.value = data.logradouro;
+    } catch (error) {
+      console.log("Está vindo aqui");
+    }
   }
 
-  function makeCheckout() {
-    const userAddress = localStorage.getItem("@address");
-
-    if (!userAddress) {
-      messageAlert("Preencha o endereco");
+  function saveUserAddress() {
+    const userInfo = {
+      name: userName.current.value,
+      lastName: userLastName.current.value,
+      address: {
+        name: userAddress.current.value,
+        number: userAddressNumber.current.value,
+        cep: userCEP.current.value,
+      }
     }
+
+    localStorage.setItem(
+      "@user",
+      JSON.stringify(userInfo)
+    );
+  }
+
+  async function finishCart() {
+    const user = JSON.parse(localStorage.getItem("@user"));
+
+    if (!user) {
+      return messageAlert("Preencha os dados");
+    };
 
     checkout();
   }
 
   return (
     <>
-      <div className={styles.userAddressContainer}>
-        <input
-          type="text"
-          value={userAddress}
-          ref={addressRef}
-          onChange={e => setUserAddress(e.target.value)}
-        />
-      </div>
+      <Head>
+        <title>PoteCake - Carrinho</title>
+      </Head>
 
       <main className={styles.cart}>
-        <section className={styles.products}>
-          <h3>Meus Pedidos</h3>
+        <section className={styles.userInfo}>
+          <div className={styles.userName}>
+            <Input
+              placeholder="Nome"
+              inputRef={userName}
+            />
+            <Input
+              placeholder="Sobrenome"
+              inputRef={userLastName}
+            />
+          </div>
 
+          <div className={styles.userAdress}>
+            <Input
+              placeholder="Endereço"
+              inputRef={userAddress}
+            />
+            <Input
+              placeholder="Número"
+              type="number"
+              inputRef={userAddressNumber}
+            />
+            <Input
+              placeholder="CEP"
+              onBlur={getUserAddress}
+              inputRef={userCEP}
+            />
+          </div>
+
+          <button onClick={saveUserAddress}>Salvar Dados</button>
+        </section>
+
+        <section className={styles.products}>
           {cart.map(product => (
+            console.log(product.id),
+
             <div key={product.id} className={styles.product}>
-              <img src="/assets/product.svg" alt="Logo do produto" />
+              <img
+                src="/assets/product.svg"
+                alt={`Logo de um ${product.name}`}
+              />
 
               <div className={styles.productInfo}>
                 <div className={styles.description}>
-                  <strong>{product.name}</strong>
-                  <p>{formatCurrency(product.totalPrice)}</p>
-                  <p>{product.quantity}x  {formatCurrency(product.pricePerUnity)}</p>
+                  <div>
+                    <strong>{product.name}</strong>
+                    <span>{formatCurrency(product.totalPrice)}</span>
+                  </div>
+
+                  <p>{product.quantity}x {formatCurrency(product.pricePerUnity)}</p>
                 </div>
 
                 <div className={styles.cartControlls}>
@@ -76,36 +149,25 @@ export default function Products() {
               </div>
             </div>
           ))}
-        </section>
 
-        <section className={styles.cartData}>
-          <button
-            disabled={cart.length <= 0}
-            onClick={makeCheckout}
-            className={styles.finishCart}
-          >
-            Finalizar Compra
-          </button>
-
-          <div className={styles.foodPrices}>
-            <h3>Descrição Pedidos</h3>
-            {cart.map(product => (
-              <li key={product.id}>
-                <strong>{product.quantity}x {product.name}</strong>
-                <span>{formatCurrency(product.totalPrice)}</span>
-              </li>
-            ))}
-          </div>
-
-          <h3 className={styles.foodTotalPrices}>
-            <span>Valor Total:</span>
-            <strong>
-              {formatCurrency(cart.reduce(
-                (prev, currentValue) =>
-                  prev + currentValue.totalPrice, 0
-              ))}
-            </strong>
-          </h3>
+          <footer>
+            <h3 className={styles.foodTotalPrices}>
+              <span>Valor Total:</span>
+              <strong>
+                {formatCurrency(cart.reduce(
+                  (prev, currentValue) =>
+                    prev + currentValue.totalPrice, 0
+                ))}
+              </strong>
+            </h3>
+            <button
+              disabled={cart.length <= 0}
+              className={styles.finishCart}
+              onClick={finishCart}
+            >
+              Finalizar Compra
+            </button>
+          </footer>
         </section>
       </main>
     </>
