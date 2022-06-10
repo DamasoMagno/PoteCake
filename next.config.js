@@ -2,7 +2,9 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ['http://localhost:3000/api/products'],
+    domains: [
+      'https://api-sa-east-1.graphcms.com/v2/cl41tk8ki3ie601xsb87t67qe/master',
+    ],
   },
 }
 

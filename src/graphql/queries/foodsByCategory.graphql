@@ -1,0 +1,11 @@
+query FoodsByCategory($category: String!) {
+  foods(where: { categories_some: { slug: $category } }) {
+    id
+    image {
+      url
+    }
+    name
+    description
+    price
+  }
+}

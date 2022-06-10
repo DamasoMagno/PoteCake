@@ -46,36 +46,40 @@ export function CartProvider({ children }: CartProviderProps) {
   }, []);
 
   async function getProduct(id: string) {
-    const { data: { product } } = await client.query({
-      query: gql`{
-        product ( where: { id: "${id}" } ) {
-         id
-         image {
-           url
+    try {
+      const { data: { food } } = await client.query({
+        query: gql`{
+          food ( where: { id: "${id}" } ) {
+           id
+           image {
+             url
+           }
+           name
+           description
+           price
          }
-         name
-         description
-         price
-       }
-     }`
-    })
+       }`
+      });
 
-    const productFound = cart.findIndex(
-      productCard => productCard.id === product.id
-    );
+      const productFound = cart.findIndex(
+        productCard => productCard.id === food.id
+      );
 
-    return {
-      position: productFound,
-      product
+      return {
+        position: productFound,
+        food
+      }
+    } catch (error) {
+      console.log(error);
     }
   }
 
   async function addProductToCart(id: string) {
     try {
-      const { position, product } = await getProduct(id);
+      const { position, food } = await getProduct(id);
 
       if (position > -1) {
-        const products = cart.filter(productCard => productCard.id !== product.id);
+        const products = cart.filter(productCard => productCard.id !== food.id);
         setCart([...products]);
 
         messageAlert("Produto removido do carrinho");
@@ -86,10 +90,10 @@ export function CartProvider({ children }: CartProviderProps) {
       }
 
       const newProduct = {
-        id: product.id,
-        name: product.name,
-        pricePerUnity: product.price,
-        totalPrice: product.price * 1,
+        id: food.id,
+        name: food.name,
+        pricePerUnity: food.price,
+        totalPrice: food.price * 1,
         quantity: 1
       }
 

@@ -1,5 +1,5 @@
-query products {
-  products {
+query Foods {
+  foods {
     id
     image {
       url

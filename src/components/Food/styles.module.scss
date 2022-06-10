@@ -1,6 +1,8 @@
 .foodCartContainer {
   display: flex;
   flex-direction: column;
+  border-radius: 8px;
+  overflow: hidden;
   justify-content: space-between;
 
   .foodImage {
@@ -9,7 +11,7 @@
 
   .foodInfo {
     height: 100%;
-    padding: .3rem .5rem 0;
+    padding: 0.3rem 0.5rem 0;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -22,21 +24,21 @@
       }
 
       p {
-        font-size: .9rem;
+        font-size: 0.9rem;
         margin-top: 0.5rem;
         line-height: 1.25rem;
         text-align: justify;
-        color: rgba(98, 98, 100, .85);
+        color: rgba(98, 98, 100, 0.85);
       }
 
       small {
-        margin: .8rem 0 1.2rem;
+        margin: 0.8rem 0 1.2rem;
         font-size: 0.85rem;
         display: flex;
         align-items: center;
         font-weight: bold;
-        gap: .25rem;
-        color: rgba(98, 98, 100, .9);
+        gap: 0.25rem;
+        color: rgba(98, 98, 100, 0.9);
       }
     }
 
@@ -54,17 +56,22 @@
         background-color: var(--brown-700);
         font-weight: 700;
         border-radius: 0.25rem;
-        padding: .5rem .85rem;
+        padding: 0.5rem 1rem;
         color: #fff;
+        transition: filter 0.2s;
 
         &.remove {
-          background: rgba(255, 0, 0, .9);
+          background: rgba(255, 0, 0, 0.521);
         }
 
         svg {
-          width: .85rem;
-          height: .85rem;
-          margin-right: .5rem;
+          width: 0.85rem;
+          height: 0.85rem;
+          margin-right: 0.5rem;
+        }
+
+        &:hover {
+          filter: brightness(0.9);
         }
       }
 

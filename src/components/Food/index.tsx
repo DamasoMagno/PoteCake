@@ -32,7 +32,7 @@ export function Food({ food, ...props }: FoodProps) {
 
   return (
     <div className={styles.foodCartContainer}>
-      <img src="assets/product.svg" className={styles.foodImage} />
+      <img src={food.image.url} className={styles.foodImage} />
 
       <div className={styles.foodInfo}>
         <div className={styles.description}>

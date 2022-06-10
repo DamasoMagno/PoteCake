@@ -1,7 +1,7 @@
 .container {
   max-width: 77rem;
   padding: 0 1rem;
-  margin: 1rem auto;
+  margin: 2rem auto;
 
   .filterFoods {
     display: flex;
@@ -14,65 +14,66 @@
       justify-content: space-between;
     }
 
-    div {
-      padding: 0 0.5rem;
+    .options {
       display: flex;
-      align-items: center;
-      border-radius: 0.25rem;
-      transition: border 0.2s, color 0.2s;
-      border: 2px solid rgba(0, 0, 0, 0.1);
+      width: 100%;
+      gap: 1rem;
 
-      input,
-      select {
-        border: 0;
-        background: transparent;
-        outline: none;
-        height: 3rem;
-        width: 100%;
+      > div {
         padding: 0 0.5rem;
-        margin-right: 0.25rem;
-        font-size: 1.125rem;
-        -webkit-appearance: none;
+        flex: 1;
+        display: flex;
+        align-items: center;
+        border-radius: 0.25rem;
+        transition: border 0.2s, color 0.2s;
+        border: 1px solid rgba(0, 0, 0, 0.1);
 
-        &::placeholder {
-          color: gray;
+        select {
+          border: 0;
+          background: transparent;
+          outline: none;
+          height: 3rem;
+          width: 100%;
+          padding: 0 0.5rem;
+          margin-right: 0.25rem;
+          font-size: 1.125rem;
+          -webkit-appearance: none;
+
+          &::placeholder {
+            color: gray;
+          }
         }
-      }
 
-      svg {
-        color: rgba(0, 0, 0, 0.1);
-      }
+        svg {
+          color: rgba(0, 0, 0, 0.1);
+        }
 
-      &:focus-within {
-        &.search,
-        &.filter {
-          border: 2px solid var(--brown-900);
+        &:focus-within {
+          border-color: var(--brown-900);
 
           svg {
             color: var(--brown-900);
           }
         }
       }
+    }
 
-      @media (min-width: 768px) {
-        &.search {
-          max-width: 450px;
-          width: 100%;
-        }
+    @media (min-width: 768px) {
+      .options {
+        width: 30%;
+      }
 
-        &.filter {
-          max-width: 150px;
-          width: 100%;
-        }
+      > div:first-child {
+        width: 40%;
       }
     }
   }
 
   .menu {
-    margin-top: 2rem;
+    margin-top: 1.5rem;
 
     .foods {
-      margin-top: 1.5rem;
+      margin-top: 0.5rem;
       display: grid;
       gap: 2rem;
 

@@ -12,120 +12,110 @@
   .userInfo {
     display: flex;
     flex-direction: column;
+  }
 
-    > div {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
+  button {
+    align-self: flex-start;
+    height: 2rem;
+    color: var(--white-800);
+    padding: 0 1rem;
+    border: 0;
+    background: var(--brown-900);
+    border-radius: 4px;
+    font-weight: bold;
+    font-size: 1rem;
+  }
+}
 
-      & + div {
-        margin-top: 1rem;
-      }
+.products {
+  .product {
+    display: flex;
+    align-items: center;
+    background-color: var(--white-800);
+    padding: 1rem 0.85rem;
+    margin-bottom: 0.5rem;
+
+    img {
+      width: 9rem;
+      margin-right: 0.5rem;
+      border-radius: 0.25rem;
     }
 
-    button {
-      align-self: flex-start;
-      height: 2rem;
-      color: var(--white-800);
-      padding: 0 1rem;
-      border: 0;
-      background: var(--brown-900);
-      border-radius: 4px;
-      font-weight: bold;
-      font-size: 1rem;
+    .productInfo {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+
+      .description {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+
+        div {
+          strong {
+            font-size: 1rem;
+          }
+
+          p {
+            color: gray;
+            font-size: 0.8rem;
+          }
+        }
+
+        span {
+          margin-top: 0.25rem;
+          color: var(--brown-900);
+          font-weight: bold;
+          font-size: 1rem;
+          display: block;
+        }
+      }
+
+      .cartControlls {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        justify-content: center;
+
+        button {
+          background-color: var(--brown-700);
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          border-radius: 0.5rem;
+          border: 0;
+          padding: 0.5rem;
+          transition: all 0.2s;
+
+          svg {
+            color: #fff;
+          }
+
+          :hover {
+            filter: brightness(0.9);
+          }
+        }
+      }
     }
   }
 
-  .products {
-    .product {
+  footer {
+    margin-top: 1rem;
+
+    .foodTotalPrices {
+      margin-top: 1rem;
       display: flex;
       align-items: center;
-      background-color: var(--white-800);
-      padding: 1rem 0.85rem;
-      margin-bottom: 0.5rem;
-
-      img {
-        width: 9rem;
-        margin-right: 0.5rem;
-        border-radius: 0.25rem;
-      }
-
-      .productInfo {
-        display: flex;
-        justify-content: space-between;
-        width: 100%;
-
-        .description {
-          display: flex;
-          flex-direction: column;
-          justify-content: space-between;
-
-          div {
-            strong {
-              font-size: 1rem;
-            }
-
-            p {
-              color: gray;
-              font-size: 0.8rem;
-            }
-          }
-
-          span {
-            margin-top: 0.25rem;
-            color: var(--brown-900);
-            font-weight: bold;
-            font-size: 1rem;
-            display: block;
-          }
-        }
-
-        .cartControlls {
-          display: flex;
-          flex-direction: column;
-          gap: 0.5rem;
-          justify-content: center;
-
-          button {
-            background-color: var(--brown-700);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border-radius: 0.5rem;
-            border: 0;
-            padding: 0.5rem;
-            transition: all 0.2s;
-
-            svg {
-              color: #fff;
-            }
-
-            :hover {
-              filter: brightness(0.9);
-            }
-          }
-        }
-      }
+      justify-content: space-between;
     }
 
-    footer {
+    button {
       margin-top: 1rem;
-
-      .foodTotalPrices {
-        margin-top: 1rem;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-      }
-
-      button {
-        margin-top: 1rem;
-        background: var(--brown-700);
-        width: 100%;
-        border: 0;
-        height: 3rem;
-        color: var(--white-800);
-      }
+      background: var(--brown-700);
+      width: 100%;
+      border: 0;
+      height: 3rem;
+      color: var(--white-800);
     }
   }
 }

@@ -1,0 +1,11 @@
+query FoodsByName($name: String!) {
+  foods(where: { name_contains: $name }) {
+    id
+    image {
+      url
+    }
+    name
+    description
+    price
+  }
+}

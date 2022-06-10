@@ -1,13 +1,13 @@
 import Head from "next/head";
-import { ChangeEvent, useEffect, useRef, useState } from "react";
+import { ChangeEvent, useEffect, useRef } from "react";
 import axios from "axios";
 import { MdAdd, MdDelete, MdRemove } from "react-icons/md";
 
-import { messageAlert } from "src/utils/messageAlert";
+import { messageAlert } from "../utils/messageAlert";
 import { useCart } from "../context/CartContext";
 import { formatCurrency } from "../utils/formatCurrency";
 
-import { Input } from "@component/Input";
+import { Input } from "@components/Input";
 
 import styles from "@styles/pages/Cart.module.scss";
 
@@ -39,10 +39,20 @@ export default function Products() {
   }, []);
 
   async function getUserAddress(event: ChangeEvent<HTMLInputElement>) {
+    let formatCep = "";
+
+    if (event.target.value.length == 9) {
+      const digitalPoint = event.target.value.slice(6, 9);
+      const firstPoints = event.target.value.slice(0, 5);
+
+      formatCep = firstPoints + "-" + digitalPoint;
+    }
+
     try {
-      const { data } = await axios.get(`https://viacep.com.br/ws/${event.target.value}/json/`);
+      const { data } = await axios.get(`https://viacep.com.br/ws/${formatCep}/json/`);
 
       if (data.localidade !== "Itapipoca") {
+        userAddress.current.value = "";
         return messageAlert("Não entregamos fora de itapipoca");
       }
 
@@ -98,10 +108,11 @@ export default function Products() {
             />
           </div>
 
-          <div className={styles.userAdress}>
+          <div className={styles.userAddress}>
             <Input
-              placeholder="Endereço"
-              inputRef={userAddress}
+              placeholder="Ensira um cep válido"
+              onBlur={getUserAddress}
+              inputRef={userCEP}
             />
             <Input
               placeholder="Número"
@@ -109,9 +120,9 @@ export default function Products() {
               inputRef={userAddressNumber}
             />
             <Input
-              placeholder="CEP"
-              onBlur={getUserAddress}
-              inputRef={userCEP}
+              placeholder="Endereço"
+              inputRef={userAddress}
+              disabled
             />
           </div>
 

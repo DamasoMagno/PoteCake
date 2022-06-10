@@ -1,13 +1,14 @@
 import Head from "next/head";
+import Link from "next/link";
 import Image from "next/image";
 
-import { client } from "src/libs/apollo";
+import { client } from "../libs/apollo";
 import { useCart } from "../context/CartContext";
-import { ProductsDocument } from "../generated/graphql";
+import { FoodsDocument } from "../generated/graphql";
 import { ProductsQuery } from "../types/FoodQuery";
 
-import { Food } from "@component/Food";
-import { SectionTitle } from "@component/SectionTitle";
+import { Food } from "@components/Food";
+import { SectionTitle } from "@components/SectionTitle";
 
 import styles from "@styles/pages/Home.module.scss";
 
@@ -24,10 +25,8 @@ export default function Home({ foods }: ProductsQuery) {
         <div className={styles.content}>
           <div>
             <h2>
-              A confeitaria da
-              <strong>
-                Vizinhança
-              </strong>
+              A confetaria da
+              <strong>Vizinhança</strong>
             </h2>
             <p>
               Priorizamos a boa experiência
@@ -44,7 +43,12 @@ export default function Home({ foods }: ProductsQuery) {
       </section>
 
       <main className={styles.menu}>
-        <SectionTitle>Nosso Cardápio</SectionTitle>
+        <div>
+          <SectionTitle>Nossa Cardápio</SectionTitle>
+          <Link href="/menu">
+            <span>ver todos</span>
+          </Link>
+        </div>
 
         <div className={styles.products}>
           {foods.map(food => (
@@ -61,13 +65,13 @@ export default function Home({ foods }: ProductsQuery) {
 }
 
 export const getServerSideProps = async () => {
-  const { data } = await client.query({
-    query: ProductsDocument
+  const { data: { foods } } = await client.query({
+    query: FoodsDocument
   });
 
   return {
     props: {
-      foods: data.products
+      foods,
     }
   }
 }

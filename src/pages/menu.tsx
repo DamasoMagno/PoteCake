@@ -1,52 +1,74 @@
 import Head from "next/head";
 import { ChangeEvent, useState } from "react";
-import { MdSearch, MdArrowDropDown } from "react-icons/md";
+import { MdSearch, MdArrowDropDown, MdDeliveryDining } from "react-icons/md";
 
-import { CategoriesDocument, ProductsDocument } from "src/generated/graphql";
+import { FoodType } from "../types/Food";
+import { CategoriesDocument, FoodsByCategoryDocument, FoodsByNameDocument, FoodsDocument } from "../generated/graphql";
 import { useCart } from "../context/CartContext";
-import { client } from "src/libs/apollo";
+import { CategoryType } from "../types/Category";
+import { client } from "../libs/apollo";
 
-import { Food } from "@component/Food";
-import { SectionTitle } from "@component/SectionTitle";
+import { Food } from "@components/Food";
+import { SectionTitle } from "@components/SectionTitle";
+import { Input } from "@components/Input";
 
 import styles from "@styles/pages/Menu.module.scss";
-import { gql } from "@apollo/client";
 
 export default function Menu({ foods, categories }: any) {
   const { addProductToCart } = useCart();
 
-  const [products, setProducts] = useState(foods);
-  const [categoriesN, setCategories] = useState(categories);
+  const [allFoods, setAllFoods] = useState<FoodType[]>(foods);
+  const [category, setCategory] = useState("Todos");
 
-  async function searchProduct(event: ChangeEvent<HTMLSelectElement>) {
+  let timer = null;
+
+  async function searchFoods(event: ChangeEvent<HTMLInputElement>) {
+    const foodName = event.target.value;
+    clearInterval(timer);
+
+    timer = setTimeout(
+      async () => {
+        try {
+          const { data } = await client.query({
+            query: FoodsByNameDocument,
+            variables: {
+              name: foodName
+            }
+          });
+
+          setAllFoods([...data.foods]);
+        } catch (error) { }
+      }, 500
+    );
+  }
+
+  async function filterFoodsByCategory(event: ChangeEvent<HTMLSelectElement>) {
     const category = event.target.value;
+    let allFoods = [];
 
     try {
-      if (!category) return;
+      if (!category) {
+        const { data } = await client.query({
+          query: FoodsDocument,
+        });
 
-      const data = await client.query({
-        query: gql`{
-          products(
-            where: { 
-              categories_some: {
-                slug: "${category}"
-              } 
-            }
-          ){
-            id
-            image {
-              url
-            }
-            name
-            description
-            price
+        allFoods = [...data.foods];
+        setCategory("Todos");
+      } else {
+        const { data } = await client.query({
+          query: FoodsByCategoryDocument,
+          variables: {
+            category
           }
-        }`
-      });
+        });
 
-      setProducts([...data.data.products])
+        allFoods = [...data.foods];
+        setCategory(category);
+      }
+
+      setAllFoods(allFoods);
     } catch (error) {
-
+      console.log(error);
     }
   }
 
@@ -58,32 +80,44 @@ export default function Menu({ foods, categories }: any) {
 
       <main className={styles.container}>
         <section className={styles.filterFoods}>
-          <div className={styles.search}>
-            <MdSearch size={24} />
-            <input placeholder="Procurar produto" />
-          </div>
+          <Input
+            placeholder="Pesquisar produto"
+            icon={MdSearch}
+            iconPosition="left"
+            onChange={searchFoods}
+          />
 
-          <div className={styles.filter}>
-            <select onChange={searchProduct}>
-              <option value="">Todos</option>
-              {categoriesN.map(category => (
-                <option
-                  value={category.name}
-                  key={category.id}
-                >
-                  {category.name}
-                </option>
-              ))}
-            </select>
-            <MdArrowDropDown size={32} />
+          <div className={styles.options}>
+            <div className={styles.filter}>
+              <select onChange={filterFoodsByCategory}>
+                <option value="">Todos</option>
+                {categories.map((category: CategoryType) => (
+                  <option
+                    value={category.name}
+                    key={category.id}
+                  >
+                    {category.name}
+                  </option>
+                ))}
+              </select>
+              <MdArrowDropDown size={32} />
+            </div>
+
+            <div>
+              <MdDeliveryDining />
+              <div>
+                <h4>Entrega</h4>
+                <span>30 - 40 min</span>
+              </div>
+            </div>
           </div>
         </section>
 
         <section className={styles.menu}>
-          <SectionTitle>Todos</SectionTitle>
+          <SectionTitle>{category}</SectionTitle>
 
           <div className={styles.foods}>
-            {products.map(food => (
+            {allFoods.map((food: FoodType) => (
               <Food
                 food={food}
                 key={food.id}
@@ -97,9 +131,9 @@ export default function Menu({ foods, categories }: any) {
   );
 }
 
-export const getServerSideProps = async ({ ctx }) => {
-  const { data: { products } } = await client.query({
-    query: ProductsDocument,
+export const getServerSideProps = async () => {
+  const { data: { foods } } = await client.query({
+    query: FoodsDocument,
   });
 
   const { data: { categories } } = await client.query({
@@ -108,8 +142,8 @@ export const getServerSideProps = async ({ ctx }) => {
 
   return {
     props: {
-      foods: products,
-      categories: categories
+      foods,
+      categories
     }
   }
 }

@@ -17,6 +17,15 @@
     margin-right: 0.25rem;
     font-size: 1.125rem;
     -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+
+    &[type='number']::-webkit-inner-spin-button,
+    &[type='number']::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+    }
 
     &::placeholder {
       color: gray;
@@ -24,14 +33,16 @@
   }
 
   svg {
-    color: rgba(0, 0, 0, 0.1);
+    color: rgba(0, 0, 0, 0.5);
+    width: 1.25rem;
+    height: 1.25rem;
 
-    &.right {
+    &.left {
       order: 0;
     }
 
     &.right {
-      order: 1;
+      order: 0;
     }
   }
 }

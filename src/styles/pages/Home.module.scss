@@ -48,9 +48,19 @@
 }
 
 .menu {
-  max-width: 77.87rem;
+  max-width: 77rem;
   padding: 0 1rem;
   margin: 3rem auto;
+
+  > div:first-child {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    span {
+      color: rgba(0, 0, 0, 0.25);
+    }
+  }
 
   .products {
     margin: 2rem auto;

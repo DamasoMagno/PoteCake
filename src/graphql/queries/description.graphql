@@ -1,0 +1,11 @@
+query AboutUs($slug: String!) {
+  aboutUs(where: { slug: $slug }) {
+    title {
+      html
+    }
+    description
+    logo {
+      url
+    }
+  }
+}
