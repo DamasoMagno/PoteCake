@@ -2,17 +2,21 @@ import Head from "next/head";
 import Link from "next/link";
 import Image from "next/image";
 
-import { client } from "../libs/apollo";
-import { useCart } from "../context/CartContext";
+import { client } from "@libs/apollo";
 import { FoodsDocument } from "../generated/graphql";
-import { ProductsQuery } from "../types/FoodQuery";
+import { useCart } from "@contexts/CartContext";
+import { Food } from "@interfaces/Food";
 
-import { Food } from "@components/Food";
+import { FoodCard } from "@components/FoodCard";
 import { SectionTitle } from "@components/SectionTitle";
 
 import styles from "@styles/pages/Home.module.scss";
 
-export default function Home({ foods }: ProductsQuery) {
+interface HomeProps {
+  foods: Food[]
+}
+
+export default function Home({ foods }: HomeProps) {
   const { addProductToCart } = useCart();
 
   return (
@@ -33,9 +37,10 @@ export default function Home({ foods }: ProductsQuery) {
               de nossos clientes, com nossas comidas
             </p>
           </div>
+
           <Image
             src="/assets/logo.svg"
-            alt="Imagem de um bolo de chocolate"
+            alt="Bolo de Chocolate"
             width="400px"
             height="300px"
           />
@@ -44,7 +49,7 @@ export default function Home({ foods }: ProductsQuery) {
 
       <main className={styles.menu}>
         <div>
-          <SectionTitle>Nossa Cardápio</SectionTitle>
+          <SectionTitle>Nosso Cardápio</SectionTitle>
           <Link href="/menu">
             <span>ver todos</span>
           </Link>
@@ -52,7 +57,7 @@ export default function Home({ foods }: ProductsQuery) {
 
         <div className={styles.products}>
           {foods.map(food => (
-            <Food
+            <FoodCard
               food={food}
               key={food.id}
               onClick={() => addProductToCart(food.id)}
@@ -65,13 +70,13 @@ export default function Home({ foods }: ProductsQuery) {
 }
 
 export const getServerSideProps = async () => {
-  const { data: { foods } } = await client.query({
-    query: FoodsDocument
+  const foodsQuery = await client.query({
+    query: FoodsDocument,
   });
 
   return {
     props: {
-      foods,
+      foods: foodsQuery.data.foods,
     }
   }
 }

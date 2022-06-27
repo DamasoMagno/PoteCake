@@ -1,9 +1,4 @@
-import {
-  ComponentType,
-  FC,
-  InputHTMLAttributes,
-  LegacyRef
-} from "react";
+import { ComponentType, InputHTMLAttributes, LegacyRef } from "react";
 import { IconBaseProps } from "react-icons";
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
@@ -14,12 +9,12 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 
 import styles from "./styles.module.scss";
 
-export const Input: FC<InputProps> = ({
+export function Input({
   icon: Icon,
   iconPosition,
   inputRef,
   ...props
-}) => {
+}: InputProps) {
   return (
     <div className={styles.container}>
       <input

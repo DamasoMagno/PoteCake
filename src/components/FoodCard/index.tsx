@@ -2,18 +2,17 @@ import { ButtonHTMLAttributes, useEffect, useState } from "react";
 import { MdRemoveShoppingCart } from "react-icons/md";
 import { FiShoppingCart } from "react-icons/fi";
 
-import { useCart } from "../../context/CartContext";
-import { FoodType } from "../../types/Food";
-import { formatCurrency } from "../../utils/formatCurrency";
+import { useCart } from "@contexts/CartContext";
+import { Food } from "@interfaces/Food";
+import { formatCurrency } from "@utils/formatCurrency";
 
-interface FoodProps
-  extends ButtonHTMLAttributes<HTMLButtonElement> {
-  food: Omit<FoodType, "category">;
+interface FoodProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+  food: Food;
 }
 
 import styles from "./styles.module.scss";
 
-export function Food({ food, ...props }: FoodProps) {
+export function FoodCard({ food, ...props }: FoodProps) {
   const { cart } = useCart();
 
   const [foodHasInCart, setFoodhasInCart] = useState(false);
@@ -38,15 +37,11 @@ export function Food({ food, ...props }: FoodProps) {
         <div className={styles.description}>
           <h3>{food.name}</h3>
           <p>{food.description}</p>
-          { /* 
-          <small>
-            <FaUtensils />
-            {food.category}
-          </small>*/ }
-
         </div>
 
         <div className={styles.price}>
+          <strong>{formatCurrency(Number(food.price))}</strong>
+
           <button
             className={foodHasInCart ? styles.remove : null}
             {...props}
@@ -64,7 +59,6 @@ export function Food({ food, ...props }: FoodProps) {
                 </>
               )}
           </button>
-          <strong>{formatCurrency(Number(food.price))}</strong>
         </div>
       </div>
     </div>

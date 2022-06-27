@@ -1,10 +1,11 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
+
 import { useEffect, useState } from "react";
-import { FiShoppingCart, FiShoppingBag } from "react-icons/fi";
+import { FiShoppingBag } from "react-icons/fi";
 import { MdClose, MdMenu } from "react-icons/md";
 
-import { useCart } from "src/context/CartContext";
+import { useCart } from "@contexts/CartContext";
 
 import styles from "./styles.module.scss";
 
@@ -22,7 +23,10 @@ export function Header() {
 
   return (
     <header className={styles.headerContainer}>
-      <div className={`${styles.content} ${menuIsOpen && styles.active}`}>
+      <div className={`
+        ${styles.content} 
+        ${menuIsOpen && styles.active}
+      `}>
         <Link href="/">
           <h2>PoteCake.</h2>
         </Link>
@@ -33,9 +37,6 @@ export function Header() {
           </Link>
           <Link href="/menu">
             <li>Cardápio</li>
-          </Link>
-          <Link href="/contact">
-            <li>Contato</li>
           </Link>
           <Link href="/cart">
             <div className={styles.cart}>

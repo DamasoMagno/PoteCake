@@ -1,13 +1,14 @@
 import { AppProps } from "next/app";
+
 import { ApolloProvider } from "@apollo/client";
 import { ToastContainer } from "react-toastify";
 
-import { CartProvider } from "../context/CartContext";
-import { client } from "../libs/apollo";
+import { CartProvider } from "@contexts/CartContext";
+import { client } from "@libs/apollo";
 
 import { Header } from "@components/Header";
 
-import "../styles/global.scss";
+import "@styles/global.scss";
 
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -16,7 +17,6 @@ function MyApp({ Component, pageProps }: AppProps) {
     <ApolloProvider client={client}>
       <CartProvider>
         <Header />
-
         <Component {...pageProps} />
 
         <ToastContainer />

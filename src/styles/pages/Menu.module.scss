@@ -1,7 +1,7 @@
 .container {
   max-width: 77rem;
   padding: 0 1rem;
-  margin: 2rem auto;
+  margin: 1.5rem auto;
 
   .filterFoods {
     display: flex;
@@ -19,7 +19,7 @@
       width: 100%;
       gap: 1rem;
 
-      > div {
+      .filter {
         padding: 0 0.5rem;
         flex: 1;
         display: flex;

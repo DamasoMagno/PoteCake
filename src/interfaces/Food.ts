@@ -1,4 +1,4 @@
-export type FoodType = {
+export interface Food {
   id: string
   name: string
   description: string
@@ -6,5 +6,4 @@ export type FoodType = {
   image?: {
     url: string
   }
-  category: string
 }

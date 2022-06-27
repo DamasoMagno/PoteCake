@@ -1,11 +1,12 @@
 import Head from "next/head";
-import { ChangeEvent, useEffect, useRef } from "react";
-import axios from "axios";
-import { MdAdd, MdDelete, MdRemove } from "react-icons/md";
 
-import { messageAlert } from "../utils/messageAlert";
-import { useCart } from "../context/CartContext";
-import { formatCurrency } from "../utils/formatCurrency";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
+import axios from "axios";
+import { toast } from "react-toastify";
+import { MdAdd, MdDelete, MdRemove, MdPlace, MdTextFields } from "react-icons/md";
+
+import { useCart } from "@contexts/CartContext";
+import { formatCurrency } from "@utils/formatCurrency";
 
 import { Input } from "@components/Input";
 
@@ -18,6 +19,8 @@ export default function Products() {
     decrementProductAmount,
     checkout
   } = useCart();
+
+  const [cepIsInvalid, setCepIsInvalid] = useState("");
 
   const userName = useRef<HTMLInputElement>(null);
   const userLastName = useRef<HTMLInputElement>(null);
@@ -39,21 +42,34 @@ export default function Products() {
   }, []);
 
   async function getUserAddress(event: ChangeEvent<HTMLInputElement>) {
-    let formatCep = "";
+    let cepFormatted = "";
 
-    if (event.target.value.length == 9) {
-      const digitalPoint = event.target.value.slice(6, 9);
-      const firstPoints = event.target.value.slice(0, 5);
+    if (event.target.value.length < 8) {
+      const numbers = event.target.value.slice(6, 9);
+      const digits = event.target.value.slice(0, 5);
 
-      formatCep = firstPoints + "-" + digitalPoint;
+      cepFormatted = numbers + "-" + digits;
     }
 
     try {
-      const { data } = await axios.get(`https://viacep.com.br/ws/${formatCep}/json/`);
+      const { data } = await axios.get(`https://viacep.com.br/ws/${cepFormatted}/json/`);
 
       if (data.localidade !== "Itapipoca") {
         userAddress.current.value = "";
-        return messageAlert("Não entregamos fora de itapipoca");
+
+        return toast(
+          "Não entregamos fora de itapipoca",
+          {
+            type: "error",
+            autoClose: 1000,
+            icon: <MdPlace />,
+            theme: "colored",
+            bodyStyle: {
+              fontSize: "1.25rem"
+            },
+            closeButton: true
+          }
+        );
       }
 
       userAddress.current.value = data.logradouro;
@@ -69,7 +85,6 @@ export default function Products() {
       address: {
         name: userAddress.current.value,
         number: userAddressNumber.current.value,
-        cep: userCEP.current.value,
       }
     }
 
@@ -83,7 +98,19 @@ export default function Products() {
     const user = JSON.parse(localStorage.getItem("@user"));
 
     if (!user) {
-      return messageAlert("Preencha os dados");
+      return toast(
+        "Preencha os dados",
+        {
+          type: "warning",
+          autoClose: 1000,
+          icon: <MdTextFields />,
+          theme: "colored",
+          bodyStyle: {
+            fontSize: "1.25rem"
+          },
+          closeButton: true
+        }
+      );
     };
 
     checkout();

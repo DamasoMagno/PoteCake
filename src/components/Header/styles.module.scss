@@ -98,6 +98,10 @@
         align-items: stretch;
         padding: 1rem 1.65rem;
 
+        h2 {
+          display: none;
+        }
+
         nav {
           width: 100%;
           display: flex;

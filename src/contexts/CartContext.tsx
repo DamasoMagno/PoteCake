@@ -1,18 +1,13 @@
-import {
-  createContext,
-  ReactNode,
-  useContext,
-  useEffect,
-  useState
-} from "react";
+import { createContext, FC, useContext, useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import { MdDelete, MdDone } from "react-icons/md";
 import { gql } from "@apollo/client";
 
 import { client } from "src/libs/apollo";
 
-import { formatCurrency } from "../utils/formatCurrency";
-import { messageAlert } from "../utils/messageAlert";
+import { formatCurrency } from "@utils/formatCurrency";
 
-export type ProductCart = {
+interface ProductCart {
   id: string;
   name: string;
   pricePerUnity: number;
@@ -20,7 +15,7 @@ export type ProductCart = {
   totalPrice: number;
 }
 
-type CartContextProps = {
+interface CartContextProps {
   cart: ProductCart[];
   addProductToCart(id: string): Promise<void>;
   incrementProductAmount(id: string): Promise<void>;
@@ -28,13 +23,23 @@ type CartContextProps = {
   checkout(): void;
 }
 
-type CartProviderProps = {
-  children: ReactNode;
-}
-
 export const CartContext = createContext({} as CartContextProps);
 
-export function CartProvider({ children }: CartProviderProps) {
+const GET_FOOD_BY_ID = gql`
+  query GetFood ($id: String!) {
+    food ( where: { id: $id } ) {
+      id
+      image {
+        url
+      }
+      name
+      description
+      price
+    }
+  }
+`;
+
+export const CartProvider: FC = ({ children }) => {
   const [cart, setCart] = useState<ProductCart[]>([]);
 
   useEffect(() => {
@@ -82,7 +87,19 @@ export function CartProvider({ children }: CartProviderProps) {
         const products = cart.filter(productCard => productCard.id !== food.id);
         setCart([...products]);
 
-        messageAlert("Produto removido do carrinho");
+        toast(
+          "Produto removido",
+          {
+            type: "warning",
+            autoClose: 1000,
+            icon: <MdDelete />,
+            theme: "colored",
+            bodyStyle: {
+              fontSize: "1.25rem"
+            },
+            closeButton: true
+          }
+        )
 
         localStorage.setItem("@cart", JSON.stringify([...products]));
 
@@ -99,7 +116,19 @@ export function CartProvider({ children }: CartProviderProps) {
 
       setCart(cart => [...cart, newProduct]);
 
-      messageAlert("Produto adicionad ao carrinho");
+      toast(
+        "Produto adicionado ao carrinho",
+        {
+          type: "success",
+          autoClose: 1000,
+          icon: <MdDone />,
+          theme: "colored",
+          bodyStyle: {
+            fontSize: "1.25rem"
+          },
+          closeButton: true
+        }
+      )
 
       localStorage.setItem("@cart", JSON.stringify([...cart, newProduct]));
     } catch (error) {
@@ -118,7 +147,7 @@ export function CartProvider({ children }: CartProviderProps) {
 
       localStorage.setItem("@cart", JSON.stringify(cart));
     } catch (error) {
-      console.log("Houve erro");
+      console.log(error);
     }
   }
 
@@ -166,20 +195,23 @@ export function CartProvider({ children }: CartProviderProps) {
 
       Total Pedido: 
       ${formatCurrency(
-      cart.reduce((acc, curent) => acc + curent.totalPrice, 0)
+      cart.reduce((initialCartValue, food) => initialCartValue + food.totalPrice, 0)
     )}
     `;
 
-    location.href = redirect(88996018788, message);
+    location.href = redirect(message);
 
-    localStorage.setItem("@cart", JSON.stringify([]));
-    setCart([]);
+    setTimeout(() => {
+      localStorage.setItem("@cart", JSON.stringify([]));
+
+      setCart([]);
+    }, 2500);
   }
 
-  function redirect(num: number, product: string) {
+  function redirect(product: string) {
     const params = {
       baseURL: `https://api.whatsapp.com/send?`,
-      number: `phone=${num}&`,
+      number: `phone=${process.env.NEXT_PUBLIC_PHONE_NUMBER}&`,
       cart: `text=${encodeURI(product)}&app_absent=0`
     }
 

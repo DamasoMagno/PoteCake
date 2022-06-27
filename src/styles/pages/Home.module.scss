@@ -50,7 +50,7 @@
 .menu {
   max-width: 77rem;
   padding: 0 1rem;
-  margin: 3rem auto;
+  margin: 0 auto;
 
   > div:first-child {
     display: flex;
@@ -63,7 +63,6 @@
   }
 
   .products {
-    margin: 2rem auto;
     display: grid;
     gap: 3rem;
 
