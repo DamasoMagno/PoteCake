@@ -8,7 +8,7 @@ export default function MyDocument() {
         <link rel="preconnect" href="https://fonts.gstatic.com" />
         <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet" />
 
-        <meta name="description" content="Consulte nosso cardápio pessoal" />
+        <meta name="description" content="Visite nosso cardápio pessoal" />
         <link rel="shortcut icon" href="/assets/logo.svg" />
       </Head>
 

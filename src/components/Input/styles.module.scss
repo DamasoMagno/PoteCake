@@ -45,4 +45,12 @@
       order: 0;
     }
   }
+
+  &:focus-within {
+    border: 2px solid var(--brown-900);
+
+    svg {
+      color: var(--brown-900);
+    }
+  }
 }

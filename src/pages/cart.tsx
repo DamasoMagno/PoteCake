@@ -1,16 +1,28 @@
 import Head from "next/head";
 
-import { ChangeEvent, useEffect, useRef, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
+import { MdAdd, MdDelete, MdRemove, MdPlace, MdTextFields, MdFileDownload } from "react-icons/md";
 import axios from "axios";
-import { toast } from "react-toastify";
-import { MdAdd, MdDelete, MdRemove, MdPlace, MdTextFields } from "react-icons/md";
 
 import { useCart } from "@contexts/CartContext";
+
 import { formatCurrency } from "@utils/formatCurrency";
+import { alertMenssage } from "@utils/alert";
 
 import { Input } from "@components/Input";
+import { Button } from "@components/Button";
 
 import styles from "@styles/pages/Cart.module.scss";
+
+interface User {
+  name: string;
+  lastName: string;
+  address: {
+    name: string;
+    number: string;
+    cep: string;
+  }
+}
 
 export default function Products() {
   const {
@@ -20,72 +32,80 @@ export default function Products() {
     checkout
   } = useCart();
 
-  const [cepIsInvalid, setCepIsInvalid] = useState("");
-
-  const userName = useRef<HTMLInputElement>(null);
-  const userLastName = useRef<HTMLInputElement>(null);
-
-  const userAddressNumber = useRef<HTMLInputElement>(null);
-  const userAddress = useRef<HTMLInputElement>(null);
-  const userCEP = useRef<HTMLInputElement>(null);
+  const [userName, setUserName] = useState("");
+  const [userLastName, setUserLastName] = useState("");
+  const [userCep, setUserCep] = useState("");
+  const [userNumberAdress, setUserNumberAddress] = useState("");
+  const [userAddress, setUserAddress] = useState("");
 
   useEffect(() => {
-    const user = JSON.parse(localStorage.getItem("@user"));
+    const user = JSON.parse(localStorage.getItem("@user")) as User;
 
-    if (!user) return;
+    if (user) {
+      setUserName(user.name)
+      setUserLastName(user.lastName)
+      setUserCep(user.address.cep)
+      setUserNumberAddress(user.address.number)
+      setUserAddress(user.address.name)
+    }
 
-    userName.current.value = user.name;
-    userLastName.current.value = user.lastName;
-    userAddressNumber.current.value = user.address.number;
-    userAddress.current.value = user.address.name;
-    userCEP.current.value = user.address.cep;
   }, []);
 
   async function getUserAddress(event: ChangeEvent<HTMLInputElement>) {
-    let cepFormatted = "";
+    const inputCep = event.target.value;
 
-    if (event.target.value.length < 8) {
-      const numbers = event.target.value.slice(6, 9);
-      const digits = event.target.value.slice(0, 5);
+    if (inputCep.length < 8) return setUserAddress("");
 
-      cepFormatted = numbers + "-" + digits;
-    }
+    const numbers = inputCep.slice(0, 5);
+    const digits = inputCep.slice(6, 9);
+
+    let cepFormatted = numbers + "-" + digits;
 
     try {
       const { data } = await axios.get(`https://viacep.com.br/ws/${cepFormatted}/json/`);
 
       if (data.localidade !== "Itapipoca") {
-        userAddress.current.value = "";
+        setUserAddress("");
 
-        return toast(
-          "Não entregamos fora de itapipoca",
-          {
-            type: "error",
-            autoClose: 1000,
-            icon: <MdPlace />,
-            theme: "colored",
-            bodyStyle: {
-              fontSize: "1.25rem"
-            },
-            closeButton: true
-          }
-        );
+        return alertMenssage("Não entregamos fora de itapipoca", "error", MdPlace);
       }
 
-      userAddress.current.value = data.logradouro;
+      setUserAddress(data.logradouro);
     } catch (error) {
       console.log("Está vindo aqui");
     }
   }
 
   function saveUserAddress() {
-    const userInfo = {
-      name: userName.current.value,
-      lastName: userLastName.current.value,
+    let fieldsNotValid = false;
+
+    const userInfo: User = {
+      name: userName,
+      lastName: userLastName,
       address: {
-        name: userAddress.current.value,
-        number: userAddressNumber.current.value,
+        name: userAddress,
+        number: userNumberAdress,
+        cep: userCep
       }
+    }
+
+    for (const element in userInfo) {
+      if (typeof userInfo[element] === "object") {
+        Object.keys(userInfo[element])
+          .forEach(attr => {
+            if (!userInfo[element][attr]) {
+              fieldsNotValid = true;
+            };
+          })
+      }
+
+      if (!userInfo[element]) {
+        fieldsNotValid = true;
+      }
+    }
+
+    if (fieldsNotValid) {
+      return alertMenssage("Preencha todos os campos", "error", MdFileDownload)
     }
 
     localStorage.setItem(
@@ -98,19 +118,7 @@ export default function Products() {
     const user = JSON.parse(localStorage.getItem("@user"));
 
     if (!user) {
-      return toast(
-        "Preencha os dados",
-        {
-          type: "warning",
-          autoClose: 1000,
-          icon: <MdTextFields />,
-          theme: "colored",
-          bodyStyle: {
-            fontSize: "1.25rem"
-          },
-          closeButton: true
-        }
-      );
+      return alertMenssage("Preencha os dados", "warning", MdTextFields);
     };
 
     checkout();
@@ -124,43 +132,47 @@ export default function Products() {
 
       <main className={styles.cart}>
         <section className={styles.userInfo}>
-          <div className={styles.userName}>
-            <Input
-              placeholder="Nome"
-              inputRef={userName}
-            />
-            <Input
-              placeholder="Sobrenome"
-              inputRef={userLastName}
-            />
-          </div>
+          <Input
+            placeholder="Nome"
+            value={userName}
+            onChange={e => setUserName(e.target.value)}
+          />
+          <Input
+            placeholder="Sobrenome"
+            value={userLastName}
+            onChange={e => setUserLastName(e.target.value)}
+          />
+          <Input
+            placeholder="Ensira um cep válido"
+            onBlur={getUserAddress}
+            value={userCep}
+            onChange={e => setUserCep(e.target.value)}
+          />
 
-          <div className={styles.userAddress}>
+          <div className={styles.address}>
             <Input
-              placeholder="Ensira um cep válido"
-              onBlur={getUserAddress}
-              inputRef={userCEP}
+              placeholder="Endereço"
+              disabled
+              value={userAddress}
             />
             <Input
               placeholder="Número"
               type="number"
-              inputRef={userAddressNumber}
-            />
-            <Input
-              placeholder="Endereço"
-              inputRef={userAddress}
-              disabled
+              value={userNumberAdress}
+              onChange={e => setUserNumberAddress(e.target.value)}
             />
           </div>
-
-          <button onClick={saveUserAddress}>Salvar Dados</button>
+          <Button label="Salvar Dados" onClick={saveUserAddress} />
         </section>
 
         <section className={styles.products}>
-          {cart.map(product => (
-            console.log(product.id),
+          <h3>Meus Pedidos</h3>
 
-            <div key={product.id} className={styles.product}>
+          {cart.map(product => (
+            <div
+              key={product.id}
+              className={styles.product}
+            >
               <img
                 src="/assets/product.svg"
                 alt={`Logo de um ${product.name}`}
@@ -189,22 +201,21 @@ export default function Products() {
           ))}
 
           <footer>
-            <h3 className={styles.foodTotalPrices}>
+            <strong className={styles.foodTotalPrices}>
               <span>Valor Total:</span>
-              <strong>
+              <p>
                 {formatCurrency(cart.reduce(
                   (prev, currentValue) =>
                     prev + currentValue.totalPrice, 0
                 ))}
-              </strong>
-            </h3>
-            <button
-              disabled={cart.length <= 0}
-              className={styles.finishCart}
+              </p>
+            </strong>
+
+            <Button
+              label="Finalizar Compra"
               onClick={finishCart}
-            >
-              Finalizar Compra
-            </button>
+              disabled={cart.length <= 0}
+            />
           </footer>
         </section>
       </main>
