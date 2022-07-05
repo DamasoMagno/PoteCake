@@ -697,6 +697,7 @@ export type Category = Node & {
   createdBy?: Maybe<User>;
   /** Get the document in other stages */
   documentInStages: Array<Category>;
+  foods: Array<CategoryFoods>;
   /** List of Category versions */
   history: Array<Version>;
   /** The unique identifier */
@@ -706,7 +707,6 @@ export type Category = Node & {
   /** Get the other localizations for this document */
   localizations: Array<Category>;
   name: Scalars['String'];
-  products: Array<Food>;
   /** The time the document was published. Null on documents in draft stage. */
   publishedAt?: Maybe<Scalars['DateTime']>;
   /** User that last published this document */
@@ -743,6 +743,17 @@ export type CategoryDocumentInStagesArgs = {
 
 
 /** Category of products, e.g. Menswear. */
+export type CategoryFoodsArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  locales?: InputMaybe<Array<Locale>>;
+  skip?: InputMaybe<Scalars['Int']>;
+};
+
+
+/** Category of products, e.g. Menswear. */
 export type CategoryHistoryArgs = {
   limit?: Scalars['Int'];
   skip?: Scalars['Int'];
@@ -754,19 +765,6 @@ export type CategoryHistoryArgs = {
 export type CategoryLocalizationsArgs = {
   includeCurrent?: Scalars['Boolean'];
   locales?: Array<Locale>;
-};
-
-
-/** Category of products, e.g. Menswear. */
-export type CategoryProductsArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  locales?: InputMaybe<Array<Locale>>;
-  orderBy?: InputMaybe<FoodOrderByInput>;
-  skip?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<FoodWhereInput>;
 };
 
 
@@ -824,11 +822,11 @@ export type CategoryConnection = {
 
 export type CategoryCreateInput = {
   createdAt?: InputMaybe<Scalars['DateTime']>;
+  foods?: InputMaybe<CategoryFoodsCreateManyInlineInput>;
   /** Inline mutations for managing document localizations excluding the default locale */
   localizations?: InputMaybe<CategoryCreateLocalizationsInput>;
   /** name input for default locale (en) */
   name: Scalars['String'];
-  products?: InputMaybe<FoodCreateManyInlineInput>;
   slug?: InputMaybe<Scalars['String']>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
 };
@@ -871,6 +869,86 @@ export type CategoryEdge = {
   cursor: Scalars['String'];
   /** The item at the end of the edge. */
   node: Category;
+};
+
+export type CategoryFoods = Food;
+
+export type CategoryFoodsConnectInput = {
+  Food?: InputMaybe<FoodConnectInput>;
+};
+
+export type CategoryFoodsCreateInput = {
+  Food?: InputMaybe<FoodCreateInput>;
+};
+
+export type CategoryFoodsCreateManyInlineInput = {
+  /** Connect multiple existing CategoryFoods documents */
+  connect?: InputMaybe<Array<CategoryFoodsWhereUniqueInput>>;
+  /** Create and connect multiple existing CategoryFoods documents */
+  create?: InputMaybe<Array<CategoryFoodsCreateInput>>;
+};
+
+export type CategoryFoodsCreateOneInlineInput = {
+  /** Connect one existing CategoryFoods document */
+  connect?: InputMaybe<CategoryFoodsWhereUniqueInput>;
+  /** Create and connect one CategoryFoods document */
+  create?: InputMaybe<CategoryFoodsCreateInput>;
+};
+
+export type CategoryFoodsUpdateInput = {
+  Food?: InputMaybe<FoodUpdateInput>;
+};
+
+export type CategoryFoodsUpdateManyInlineInput = {
+  /** Connect multiple existing CategoryFoods documents */
+  connect?: InputMaybe<Array<CategoryFoodsConnectInput>>;
+  /** Create and connect multiple CategoryFoods documents */
+  create?: InputMaybe<Array<CategoryFoodsCreateInput>>;
+  /** Delete multiple CategoryFoods documents */
+  delete?: InputMaybe<Array<CategoryFoodsWhereUniqueInput>>;
+  /** Disconnect multiple CategoryFoods documents */
+  disconnect?: InputMaybe<Array<CategoryFoodsWhereUniqueInput>>;
+  /** Override currently-connected documents with multiple existing CategoryFoods documents */
+  set?: InputMaybe<Array<CategoryFoodsWhereUniqueInput>>;
+  /** Update multiple CategoryFoods documents */
+  update?: InputMaybe<Array<CategoryFoodsUpdateWithNestedWhereUniqueInput>>;
+  /** Upsert multiple CategoryFoods documents */
+  upsert?: InputMaybe<Array<CategoryFoodsUpsertWithNestedWhereUniqueInput>>;
+};
+
+export type CategoryFoodsUpdateManyWithNestedWhereInput = {
+  Food?: InputMaybe<FoodUpdateManyWithNestedWhereInput>;
+};
+
+export type CategoryFoodsUpdateOneInlineInput = {
+  /** Connect existing CategoryFoods document */
+  connect?: InputMaybe<CategoryFoodsWhereUniqueInput>;
+  /** Create and connect one CategoryFoods document */
+  create?: InputMaybe<CategoryFoodsCreateInput>;
+  /** Delete currently connected CategoryFoods document */
+  delete?: InputMaybe<Scalars['Boolean']>;
+  /** Disconnect currently connected CategoryFoods document */
+  disconnect?: InputMaybe<Scalars['Boolean']>;
+  /** Update single CategoryFoods document */
+  update?: InputMaybe<CategoryFoodsUpdateWithNestedWhereUniqueInput>;
+  /** Upsert single CategoryFoods document */
+  upsert?: InputMaybe<CategoryFoodsUpsertWithNestedWhereUniqueInput>;
+};
+
+export type CategoryFoodsUpdateWithNestedWhereUniqueInput = {
+  Food?: InputMaybe<FoodUpdateWithNestedWhereUniqueInput>;
+};
+
+export type CategoryFoodsUpsertWithNestedWhereUniqueInput = {
+  Food?: InputMaybe<FoodUpsertWithNestedWhereUniqueInput>;
+};
+
+export type CategoryFoodsWhereInput = {
+  Food?: InputMaybe<FoodWhereInput>;
+};
+
+export type CategoryFoodsWhereUniqueInput = {
+  Food?: InputMaybe<FoodWhereUniqueInput>;
 };
 
 /** Identifies documents */
@@ -918,9 +996,6 @@ export type CategoryManyWhereInput = {
   id_not_starts_with?: InputMaybe<Scalars['ID']>;
   /** All values starting with the given string. */
   id_starts_with?: InputMaybe<Scalars['ID']>;
-  products_every?: InputMaybe<FoodWhereInput>;
-  products_none?: InputMaybe<FoodWhereInput>;
-  products_some?: InputMaybe<FoodWhereInput>;
   publishedAt?: InputMaybe<Scalars['DateTime']>;
   /** All values greater than the given value. */
   publishedAt_gt?: InputMaybe<Scalars['DateTime']>;
@@ -993,11 +1068,11 @@ export enum CategoryOrderByInput {
 }
 
 export type CategoryUpdateInput = {
+  foods?: InputMaybe<CategoryFoodsUpdateManyInlineInput>;
   /** Manage document localizations */
   localizations?: InputMaybe<CategoryUpdateLocalizationsInput>;
   /** name input for default locale (en) */
   name?: InputMaybe<Scalars['String']>;
-  products?: InputMaybe<FoodUpdateManyInlineInput>;
   slug?: InputMaybe<Scalars['String']>;
 };
 
@@ -1155,9 +1230,6 @@ export type CategoryWhereInput = {
   name_not_starts_with?: InputMaybe<Scalars['String']>;
   /** All values starting with the given string. */
   name_starts_with?: InputMaybe<Scalars['String']>;
-  products_every?: InputMaybe<FoodWhereInput>;
-  products_none?: InputMaybe<FoodWhereInput>;
-  products_some?: InputMaybe<FoodWhereInput>;
   publishedAt?: InputMaybe<Scalars['DateTime']>;
   /** All values greater than the given value. */
   publishedAt_gt?: InputMaybe<Scalars['DateTime']>;
@@ -1352,7 +1424,6 @@ export type FoodCategoriesArgs = {
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
   locales?: InputMaybe<Array<Locale>>;
-  orderBy?: InputMaybe<CategoryOrderByInput>;
   skip?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<CategoryWhereInput>;
 };
@@ -5731,11 +5802,6 @@ export type CategoriesQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type CategoriesQuery = { __typename?: 'Query', categories: Array<{ __typename?: 'Category', id: string, name: string }> };
 
-export type FoodsQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type FoodsQuery = { __typename?: 'Query', foods: Array<{ __typename?: 'Food', id: string, name: string, description: string, price: number, image?: { __typename?: 'Asset', url: string } | null, categories: Array<{ __typename?: 'Category', name: string }> }> };
-
 export type FoodsByCategoryQueryVariables = Exact<{
   category: Scalars['String'];
 }>;
@@ -5749,6 +5815,18 @@ export type FoodsByNameQueryVariables = Exact<{
 
 
 export type FoodsByNameQuery = { __typename?: 'Query', foods: Array<{ __typename?: 'Food', id: string, name: string, description: string, price: number, image?: { __typename?: 'Asset', url: string } | null }> };
+
+export type FoodsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type FoodsQuery = { __typename?: 'Query', foods: Array<{ __typename?: 'Food', id: string, name: string, description: string, price: number, image?: { __typename?: 'Asset', url: string } | null }> };
+
+export type GetFoodByIdQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type GetFoodByIdQuery = { __typename?: 'Query', food?: { __typename?: 'Food', id: string, name: string, description: string, price: number, image?: { __typename?: 'Asset', url: string } | null } | null };
 
 
 export const CategoriesDocument = gql`
@@ -5786,49 +5864,6 @@ export function useCategoriesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions
 export type CategoriesQueryHookResult = ReturnType<typeof useCategoriesQuery>;
 export type CategoriesLazyQueryHookResult = ReturnType<typeof useCategoriesLazyQuery>;
 export type CategoriesQueryResult = Apollo.QueryResult<CategoriesQuery, CategoriesQueryVariables>;
-export const FoodsDocument = gql`
-    query Foods {
-  foods {
-    id
-    image {
-      url
-    }
-    name
-    description
-    price
-    categories {
-      name
-    }
-  }
-}
-    `;
-
-/**
- * __useFoodsQuery__
- *
- * To run a query within a React component, call `useFoodsQuery` and pass it any options that fit your needs.
- * When your component renders, `useFoodsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useFoodsQuery({
- *   variables: {
- *   },
- * });
- */
-export function useFoodsQuery(baseOptions?: Apollo.QueryHookOptions<FoodsQuery, FoodsQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<FoodsQuery, FoodsQueryVariables>(FoodsDocument, options);
-      }
-export function useFoodsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FoodsQuery, FoodsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<FoodsQuery, FoodsQueryVariables>(FoodsDocument, options);
-        }
-export type FoodsQueryHookResult = ReturnType<typeof useFoodsQuery>;
-export type FoodsLazyQueryHookResult = ReturnType<typeof useFoodsLazyQuery>;
-export type FoodsQueryResult = Apollo.QueryResult<FoodsQuery, FoodsQueryVariables>;
 export const FoodsByCategoryDocument = gql`
     query FoodsByCategory($category: String!) {
   foods(where: {categories_some: {slug: $category}}) {
@@ -5911,3 +5946,84 @@ export function useFoodsByNameLazyQuery(baseOptions?: Apollo.LazyQueryHookOption
 export type FoodsByNameQueryHookResult = ReturnType<typeof useFoodsByNameQuery>;
 export type FoodsByNameLazyQueryHookResult = ReturnType<typeof useFoodsByNameLazyQuery>;
 export type FoodsByNameQueryResult = Apollo.QueryResult<FoodsByNameQuery, FoodsByNameQueryVariables>;
+export const FoodsDocument = gql`
+    query Foods {
+  foods {
+    id
+    image {
+      url
+    }
+    name
+    description
+    price
+  }
+}
+    `;
+
+/**
+ * __useFoodsQuery__
+ *
+ * To run a query within a React component, call `useFoodsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFoodsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFoodsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useFoodsQuery(baseOptions?: Apollo.QueryHookOptions<FoodsQuery, FoodsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FoodsQuery, FoodsQueryVariables>(FoodsDocument, options);
+      }
+export function useFoodsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FoodsQuery, FoodsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FoodsQuery, FoodsQueryVariables>(FoodsDocument, options);
+        }
+export type FoodsQueryHookResult = ReturnType<typeof useFoodsQuery>;
+export type FoodsLazyQueryHookResult = ReturnType<typeof useFoodsLazyQuery>;
+export type FoodsQueryResult = Apollo.QueryResult<FoodsQuery, FoodsQueryVariables>;
+export const GetFoodByIdDocument = gql`
+    query GetFoodById($id: ID!) {
+  food(where: {id: $id}) {
+    id
+    image {
+      url
+    }
+    name
+    description
+    price
+  }
+}
+    `;
+
+/**
+ * __useGetFoodByIdQuery__
+ *
+ * To run a query within a React component, call `useGetFoodByIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetFoodByIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetFoodByIdQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetFoodByIdQuery(baseOptions: Apollo.QueryHookOptions<GetFoodByIdQuery, GetFoodByIdQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetFoodByIdQuery, GetFoodByIdQueryVariables>(GetFoodByIdDocument, options);
+      }
+export function useGetFoodByIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetFoodByIdQuery, GetFoodByIdQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetFoodByIdQuery, GetFoodByIdQueryVariables>(GetFoodByIdDocument, options);
+        }
+export type GetFoodByIdQueryHookResult = ReturnType<typeof useGetFoodByIdQuery>;
+export type GetFoodByIdLazyQueryHookResult = ReturnType<typeof useGetFoodByIdLazyQuery>;
+export type GetFoodByIdQueryResult = Apollo.QueryResult<GetFoodByIdQuery, GetFoodByIdQueryVariables>;

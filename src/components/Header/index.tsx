@@ -38,12 +38,6 @@ export function Header() {
           <Link href="/menu">
             <li>Cardápio</li>
           </Link>
-          <Link href="/cart">
-            <div className={styles.cart}>
-              <FiShoppingBag size={24} />
-              <span>{productsInCart}</span>
-            </div>
-          </Link>
         </nav>
 
         <button
@@ -52,12 +46,20 @@ export function Header() {
         >
           <MdMenu />
         </button>
+
         <button
           className={styles.close}
           onClick={() => setMenuIsOpen(false)}
         >
           <MdClose />
         </button>
+
+        <Link href="/cart">
+          <div className={styles.cart}>
+            <FiShoppingBag size={24} />
+            <span>{productsInCart}</span>
+          </div>
+        </Link>
       </div>
     </header>
   );

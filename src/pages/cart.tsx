@@ -1,7 +1,19 @@
 import Head from "next/head";
 
-import { ChangeEvent, useEffect, useState } from "react";
-import { MdAdd, MdDelete, MdRemove, MdPlace, MdTextFields, MdFileDownload } from "react-icons/md";
+import {
+  ChangeEvent,
+  FormEvent,
+  useEffect,
+  useState
+} from "react";
+import {
+  MdAdd,
+  MdDelete,
+  MdRemove,
+  MdPlace,
+  MdTextFields,
+  MdFileDownload
+} from "react-icons/md";
 import axios from "axios";
 
 import { useCart } from "@contexts/CartContext";
@@ -13,16 +25,7 @@ import { Input } from "@components/Input";
 import { Button } from "@components/Button";
 
 import styles from "@styles/pages/Cart.module.scss";
-
-interface User {
-  name: string;
-  lastName: string;
-  address: {
-    name: string;
-    number: string;
-    cep: string;
-  }
-}
+import { User } from "@interfaces/User";
 
 export default function Products() {
   const {
@@ -39,7 +42,7 @@ export default function Products() {
   const [userAddress, setUserAddress] = useState("");
 
   useEffect(() => {
-    const user = JSON.parse(localStorage.getItem("@user")) as User;
+    const user: User = JSON.parse(localStorage.getItem("@user"));
 
     if (user) {
       setUserName(user.name)
@@ -52,17 +55,12 @@ export default function Products() {
   }, []);
 
   async function getUserAddress(event: ChangeEvent<HTMLInputElement>) {
-    const inputCep = event.target.value;
-
-    if (inputCep.length < 8) return setUserAddress("");
-
-    const numbers = inputCep.slice(0, 5);
-    const digits = inputCep.slice(6, 9);
-
-    let cepFormatted = numbers + "-" + digits;
+    if (event.target.value.length < 8) {
+      return setUserAddress("");
+    };
 
     try {
-      const { data } = await axios.get(`https://viacep.com.br/ws/${cepFormatted}/json/`);
+      const { data } = await axios.get(`https://viacep.com.br/ws/${event.target.value}/json/`);
 
       if (data.localidade !== "Itapipoca") {
         setUserAddress("");
@@ -72,7 +70,7 @@ export default function Products() {
 
       setUserAddress(data.logradouro);
     } catch (error) {
-      console.log("Está vindo aqui");
+      console.log(error);
     }
   }
 
@@ -146,6 +144,7 @@ export default function Products() {
             placeholder="Ensira um cep válido"
             onBlur={getUserAddress}
             value={userCep}
+            type="number"
             onChange={e => setUserCep(e.target.value)}
           />
 
@@ -162,7 +161,11 @@ export default function Products() {
               onChange={e => setUserNumberAddress(e.target.value)}
             />
           </div>
-          <Button label="Salvar Dados" onClick={saveUserAddress} />
+
+          <Button
+            label="Salvar Dados"
+            onClick={saveUserAddress}
+          />
         </section>
 
         <section className={styles.products}>
@@ -215,6 +218,7 @@ export default function Products() {
               label="Finalizar Compra"
               onClick={finishCart}
               disabled={cart.length <= 0}
+              type="button"
             />
           </footer>
         </section>

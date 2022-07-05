@@ -1,19 +1,14 @@
 import { createContext, FC, useContext, useEffect, useState } from "react";
-import { toast } from "react-toastify";
 import { MdDelete, MdDone } from "react-icons/md";
-import { gql } from "@apollo/client";
 
 import { client } from "src/libs/apollo";
+import { GetFoodByIdDocument } from "src/generated/graphql";
 
-import { formatCurrency } from "@utils/formatCurrency";
+import { User } from "@interfaces/User";
+import { ProductCart } from "@interfaces/ProductCart";
 
-interface ProductCart {
-  id: string;
-  name: string;
-  pricePerUnity: number;
-  quantity: number;
-  totalPrice: number;
-}
+import { foodOrderFormatted } from "@utils/formatFoodOrder";
+import { alertMenssage } from "@utils/alert";
 
 interface CartContextProps {
   cart: ProductCart[];
@@ -24,20 +19,6 @@ interface CartContextProps {
 }
 
 export const CartContext = createContext({} as CartContextProps);
-
-const GET_FOOD_BY_ID = gql`
-  query GetFood ($id: String!) {
-    food ( where: { id: $id } ) {
-      id
-      image {
-        url
-      }
-      name
-      description
-      price
-    }
-  }
-`;
 
 export const CartProvider: FC = ({ children }) => {
   const [cart, setCart] = useState<ProductCart[]>([]);
@@ -53,17 +34,10 @@ export const CartProvider: FC = ({ children }) => {
   async function getProduct(id: string) {
     try {
       const { data: { food } } = await client.query({
-        query: gql`{
-          food ( where: { id: "${id}" } ) {
-           id
-           image {
-             url
-           }
-           name
-           description
-           price
-         }
-       }`
+        query: GetFoodByIdDocument,
+        variables: {
+          id
+        }
       });
 
       const productFound = cart.findIndex(
@@ -87,19 +61,11 @@ export const CartProvider: FC = ({ children }) => {
         const products = cart.filter(productCard => productCard.id !== food.id);
         setCart([...products]);
 
-        toast(
+        alertMenssage(
           "Produto removido",
-          {
-            type: "warning",
-            autoClose: 1000,
-            icon: <MdDelete />,
-            theme: "colored",
-            bodyStyle: {
-              fontSize: "1.25rem"
-            },
-            closeButton: true
-          }
-        )
+          "warning",
+          MdDelete
+        );
 
         localStorage.setItem("@cart", JSON.stringify([...products]));
 
@@ -116,19 +82,7 @@ export const CartProvider: FC = ({ children }) => {
 
       setCart(cart => [...cart, newProduct]);
 
-      toast(
-        "Produto adicionado ao carrinho",
-        {
-          type: "success",
-          autoClose: 1000,
-          icon: <MdDone />,
-          theme: "colored",
-          bodyStyle: {
-            fontSize: "1.25rem"
-          },
-          closeButton: true
-        }
-      )
+      alertMenssage("Produto adicionado ao carrinho", "success", MdDone);
 
       localStorage.setItem("@cart", JSON.stringify([...cart, newProduct]));
     } catch (error) {
@@ -180,42 +134,34 @@ export const CartProvider: FC = ({ children }) => {
   }
 
   function checkout() {
-    const user = JSON.parse(localStorage.getItem("@user"));
+    const user: User = JSON.parse(localStorage.getItem("@user"));
 
-    const message = `
-      Nome: ${user.name}
+    const userOrder = foodOrderFormatted(
+      {
+        name: user.name,
+        lastName: user.lastName,
+        address: user.address,
+        cart
+      }
+    );
 
-      Rua: ${user.address.name} 
-      Número: ${user.address.number}
-      
-      Descrição Pedidos 
-      ${cart.map(product => {
-      return `${product.quantity}x ${product.name}  ${formatCurrency(product.totalPrice)}`
-    })}
+    location.href = redirect(userOrder);
 
-      Total Pedido: 
-      ${formatCurrency(
-      cart.reduce((initialCartValue, food) => initialCartValue + food.totalPrice, 0)
-    )}
-    `;
-
-    location.href = redirect(message);
-
-    setTimeout(() => {
-      localStorage.setItem("@cart", JSON.stringify([]));
-
-      setCart([]);
-    }, 2500);
+    localStorage.setItem("@cart", JSON.stringify([]));
+    setCart([]);
   }
 
-  function redirect(product: string) {
+  function redirect(order: string) {
+    if (!process.env.NEXT_PUBLIC_PHONE_NUMBER) return;
+
     const params = {
       baseURL: `https://api.whatsapp.com/send?`,
       number: `phone=${process.env.NEXT_PUBLIC_PHONE_NUMBER}&`,
-      cart: `text=${encodeURI(product)}&app_absent=0`
+      cart: `text=${encodeURI(order)}&app_absent=0`
     }
 
     const url = `${params.baseURL}${params.number}${params.cart}`;
+
 
     return url;
   }

@@ -1,0 +1,11 @@
+query GetFoodById($id: ID!) {
+  food(where: { id: $id }) {
+    id
+    image {
+      url
+    }
+    name
+    description
+    price
+  }
+}
