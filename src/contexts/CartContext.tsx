@@ -8,7 +8,7 @@ import { User } from "@interfaces/User";
 import { ProductCart } from "@interfaces/ProductCart";
 
 import { foodOrderFormatted } from "@utils/formatFoodOrder";
-import { alertMenssage } from "@utils/alert";
+import { alertMessage } from "@utils/alert";
 
 interface CartContextProps {
   cart: ProductCart[];
@@ -61,11 +61,11 @@ export const CartProvider: FC = ({ children }) => {
         const products = cart.filter(productCard => productCard.id !== food.id);
         setCart([...products]);
 
-        alertMenssage(
-          "Produto removido",
-          "warning",
-          MdDelete
-        );
+
+        alertMessage({
+          message: "Produto removido",
+          icon: "🗑"
+        });
 
         localStorage.setItem("@cart", JSON.stringify([...products]));
 
@@ -75,6 +75,7 @@ export const CartProvider: FC = ({ children }) => {
       const newProduct = {
         id: food.id,
         name: food.name,
+        image: food.image.url,
         pricePerUnity: food.price,
         totalPrice: food.price * 1,
         quantity: 1
@@ -82,7 +83,11 @@ export const CartProvider: FC = ({ children }) => {
 
       setCart(cart => [...cart, newProduct]);
 
-      alertMenssage("Produto adicionado ao carrinho", "success", MdDone);
+
+      alertMessage({
+        message: "Produto adicionado ao carrinho",
+        icon: "🛒"
+      });
 
       localStorage.setItem("@cart", JSON.stringify([...cart, newProduct]));
     } catch (error) {

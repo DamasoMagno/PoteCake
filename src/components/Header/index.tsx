@@ -17,6 +17,14 @@ export function Header() {
 
   const [menuIsOpen, setMenuIsOpen] = useState(false);
 
+  function openMenu() {
+    setMenuIsOpen(true);
+  }
+
+  function closeMenu() {
+    setMenuIsOpen(false);
+  }
+
   useEffect(() => {
     setMenuIsOpen(false);
   }, [pathname]);
@@ -28,39 +36,61 @@ export function Header() {
         ${menuIsOpen && styles.active}
       `}>
         <Link href="/">
-          <h2>PoteCake.</h2>
+          <h2 className={styles.logo}>
+            Pote<strong>Cake.</strong>
+          </h2>
         </Link>
 
         <nav>
-          <Link href="/">
-            <li>Inicio</li>
-          </Link>
-          <Link href="/menu">
-            <li>Cardápio</li>
-          </Link>
+          <Navigation
+            url="/"
+            label="Início"
+          />
+          <Navigation
+            url="/menu"
+            label="Cardápio"
+          />
         </nav>
 
-        <button
-          className={styles.open}
-          onClick={() => setMenuIsOpen(true)}
-        >
-          <MdMenu />
-        </button>
+        <div className={styles.options}>
+          <Link href="/cart">
+            <div className={styles.cart}>
+              <FiShoppingBag size={24} />
+              <span>{productsInCart}</span>
+            </div>
+          </Link>
 
-        <button
-          className={styles.close}
-          onClick={() => setMenuIsOpen(false)}
-        >
-          <MdClose />
-        </button>
+          <button
+            className={styles.close}
+            onClick={closeMenu}
+          >
+            <MdClose />
+          </button>
 
-        <Link href="/cart">
-          <div className={styles.cart}>
-            <FiShoppingBag size={24} />
-            <span>{productsInCart}</span>
-          </div>
-        </Link>
+          <button
+            className={styles.open}
+            onClick={openMenu}
+          >
+            <MdMenu />
+          </button>
+        </div>
       </div>
     </header>
+  );
+}
+
+function Navigation({ url, label }: any) {
+  const { pathname } = useRouter();
+
+  function checkCurrentPage() {
+    return pathname === String(url) ? "linkActive" : null;
+  }
+
+  return (
+    <Link href={`${url}`}>
+      <li className={styles[checkCurrentPage()]}>
+        {label}
+      </li>
+    </Link>
   );
 }

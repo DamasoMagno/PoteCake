@@ -16,3 +16,10 @@
  <li>GraphCMS</li>
  <li>GraphQL</li>
 </ul>
+
+## Funcionalidades que faltam serem finalizadas
+
+### JS
+
+. Subtituir o campo cep, por um input formatado
+. Corrigir a menssagem de envio de produtos no Whatsapp

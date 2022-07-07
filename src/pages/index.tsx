@@ -38,12 +38,20 @@ export default function Home({ foods }: HomeProps) {
             </p>
           </div>
 
-          <Image
-            src="/assets/logo.svg"
-            alt="Bolo de Chocolate"
-            width="400px"
-            height="300px"
-          />
+          <div>
+            <Image
+              src="/assets/logo.svg"
+              alt="Bolo de Chocolate"
+              width="400px"
+              height="300px"
+            />
+
+            <img
+              src="/assets/logo.svg"
+              alt=""
+              className={styles.shadow}
+            />
+          </div>
         </div>
       </section>
 

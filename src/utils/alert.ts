@@ -1,19 +1,18 @@
-import { IconBaseProps, IconType } from 'react-icons'
-import { toast, TypeOptions } from 'react-toastify'
+import { Renderable, toast } from 'react-hot-toast'
 
-export function alertMenssage(
-  menssage: string,
-  type: TypeOptions,
-  icon: IconType
-) {
-  return toast(menssage, {
-    type,
-    autoClose: 1000,
+interface AlertMessageProps {
+  message: string
+  icon?: Renderable
+}
+
+export function alertMessage({ message, icon }: AlertMessageProps) {
+  return toast(message, {
+    duration: 2500,
+    position: 'top-center',
     icon,
-    theme: 'colored',
-    bodyStyle: {
-      fontSize: '1.25rem',
+    style: {
+      padding: '16px',
+      fontWeight: '700',
     },
-    closeButton: true,
   })
 }

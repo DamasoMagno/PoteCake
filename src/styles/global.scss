@@ -1,6 +1,7 @@
 :root {
-  --brown-900: #7e392a;
   --brown-700: #a46254;
+  --brown-900: #7e392a;
+  --brown-950: #701f0d;
 
   --white-800: #f5f5f5;
   --white: #ffff;
@@ -12,7 +13,6 @@
   box-sizing: border-box;
   font-family: 'Roboto', sans-serif;
 }
-
 html {
   @media (max-width: 1024px) {
     font-size: 93.5%;

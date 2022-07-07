@@ -1,25 +1,13 @@
 import Head from "next/head";
 
-import {
-  ChangeEvent,
-  FormEvent,
-  useEffect,
-  useState
-} from "react";
-import {
-  MdAdd,
-  MdDelete,
-  MdRemove,
-  MdPlace,
-  MdTextFields,
-  MdFileDownload
-} from "react-icons/md";
+import { ChangeEvent, useEffect, useState } from "react";
+import { MdAdd, MdDelete, MdRemove } from "react-icons/md";
 import axios from "axios";
 
 import { useCart } from "@contexts/CartContext";
 
 import { formatCurrency } from "@utils/formatCurrency";
-import { alertMenssage } from "@utils/alert";
+import { alertMessage } from "@utils/alert";
 
 import { Input } from "@components/Input";
 import { Button } from "@components/Button";
@@ -65,7 +53,12 @@ export default function Products() {
       if (data.localidade !== "Itapipoca") {
         setUserAddress("");
 
-        return alertMenssage("Não entregamos fora de itapipoca", "error", MdPlace);
+        alertMessage({
+          message: "Não entregamos fora de itapipoca",
+          icon: "❌"
+        });
+
+        return;
       }
 
       setUserAddress(data.logradouro);
@@ -75,8 +68,6 @@ export default function Products() {
   }
 
   function saveUserAddress() {
-    let fieldsNotValid = false;
-
     const userInfo: User = {
       name: userName,
       lastName: userLastName,
@@ -87,36 +78,51 @@ export default function Products() {
       }
     }
 
-    for (const element in userInfo) {
-      if (typeof userInfo[element] === "object") {
-        Object.keys(userInfo[element])
+    let fieldsNotValid = false;
+
+    for (const field in userInfo) {
+      if (typeof userInfo[field] === "object") {
+        Object.keys(userInfo[field])
           .forEach(attr => {
-            if (!userInfo[element][attr]) {
+            if (!userInfo[field][attr]) {
               fieldsNotValid = true;
             };
           })
       }
 
-      if (!userInfo[element]) {
+      if (!userInfo[field]) {
         fieldsNotValid = true;
       }
     }
 
     if (fieldsNotValid) {
-      return alertMenssage("Preencha todos os campos", "error", MdFileDownload)
+      alertMessage({
+        message: "Preencha todos os campos",
+        icon: "❗"
+      });
+
+      return;
     }
 
     localStorage.setItem(
       "@user",
       JSON.stringify(userInfo)
     );
+
+    alertMessage({
+      message: "Dados salvos com sucesso",
+      icon: "✔"
+    });
   }
 
   async function finishCart() {
     const user = JSON.parse(localStorage.getItem("@user"));
 
     if (!user) {
-      return alertMenssage("Preencha os dados", "warning", MdTextFields);
+      return alertMessage({
+        message: "Preencha os dados",
+        icon: "❗"
+      });
     };
 
     checkout();
@@ -165,6 +171,7 @@ export default function Products() {
           <Button
             label="Salvar Dados"
             onClick={saveUserAddress}
+            disabled={!userCep}
           />
         </section>
 
@@ -177,7 +184,7 @@ export default function Products() {
               className={styles.product}
             >
               <img
-                src="/assets/product.svg"
+                src={product.image}
                 alt={`Logo de um ${product.name}`}
               />
 
