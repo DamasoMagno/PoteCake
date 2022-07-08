@@ -25,8 +25,7 @@ export function foodOrderFormatted(foodOrder: FoodOrder) {
       `${product.quantity}x ${product.name} - ${formatCurrency(
         product.totalPrice
       )}`
-  )}
-  `
+  )}`
 
   const totalCartPrice = `Total Pedido: ${formatCurrency(
     foodOrder.cart.reduce(

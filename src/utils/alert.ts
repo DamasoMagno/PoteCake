@@ -8,7 +8,7 @@ interface AlertMessageProps {
 export function alertMessage({ message, icon }: AlertMessageProps) {
   return toast(message, {
     duration: 1500,
-    position: 'top-right',
+    position: 'top-center',
     icon,
     style: {
       padding: '16px',

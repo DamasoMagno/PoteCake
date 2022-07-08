@@ -2,7 +2,6 @@ import Head from "next/head";
 
 import { ChangeEvent, useEffect, useState } from "react";
 import { MdAdd, MdArrowDropDown, MdDelete, MdRemove } from "react-icons/md";
-import axios from "axios";
 
 import { useCart } from "@contexts/CartContext";
 
@@ -50,9 +49,10 @@ export default function Products() {
     };
 
     try {
-      const { data } = await axios.get(`https://viacep.com.br/ws/${event.target.value}/json/`);
+      const response = await fetch(`https://viacep.com.br/ws/${event.target.value}/json/`);
+      const { localidade, logradouro } = await response.json();
 
-      if (data.localidade !== "Itapipoca") {
+      if (localidade !== "Itapipoca") {
         setUserAddress("");
 
         alertMessage({
@@ -63,7 +63,7 @@ export default function Products() {
         return;
       }
 
-      setUserAddress(data.logradouro);
+      setUserAddress(logradouro);
     } catch (error) {
       console.log(error);
     }
@@ -84,8 +84,8 @@ export default function Products() {
 
     for (const field in userInfo) {
       if (typeof userInfo[field] === "object") {
-        Object.keys(userInfo[field])
-          .forEach(attr => {
+        Object.keys(userInfo[field]).forEach(
+          attr => {
             if (!userInfo[field][attr]) fieldsNotValid = true;
           })
       }

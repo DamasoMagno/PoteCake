@@ -1,5 +1,4 @@
 import { createContext, FC, useContext, useEffect, useState } from "react";
-import { MdDelete, MdDone } from "react-icons/md";
 
 import { client } from "src/libs/apollo";
 import { GetFoodByIdDocument } from "src/generated/graphql";
