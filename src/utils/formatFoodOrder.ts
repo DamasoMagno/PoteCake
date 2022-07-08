@@ -5,6 +5,7 @@ import { formatCurrency } from './formatCurrency'
 interface FoodOrder {
   name: string
   lastName: string
+  paymentMethod: string
   address: {
     name: string
     number: string
@@ -13,26 +14,36 @@ interface FoodOrder {
 }
 
 export function foodOrderFormatted(foodOrder: FoodOrder) {
-  const order = `
-    Nome: ${foodOrder.name} ${foodOrder.lastName}
-    Rua: ${foodOrder.address.name}  N: ${foodOrder.address.number}
+  const name = `Nome: ${foodOrder.name} ${foodOrder.lastName}`
 
-    Descrição Pedidos 
-    ${foodOrder.cart.map(
-      (product) =>
-        `${product.quantity}x ${product.name} - ${formatCurrency(
-          product.totalPrice
-        )}`
-    )}
+  const address = `Rua: ${foodOrder.address.name} N: ${foodOrder.address.number}`
 
-    Total Pedido: 
-    ${formatCurrency(
-      foodOrder.cart.reduce(
-        (initialCartValue, food) => initialCartValue + food.totalPrice,
-        0
-      )
-    )}
+  const paymentMethod = `Metodo de Pagamento: ${foodOrder.paymentMethod}`
+
+  const productsDescription = `Descrição Pedidos \n${foodOrder.cart.map(
+    (product) =>
+      `${product.quantity}x ${product.name} - ${formatCurrency(
+        product.totalPrice
+      )}`
+  )}
   `
 
-  return order
+  const totalCartPrice = `Total Pedido: ${formatCurrency(
+    foodOrder.cart.reduce(
+      (initialCartValue, food) => initialCartValue + food.totalPrice,
+      0
+    )
+  )}`
+
+  return (
+    name +
+    '\n' +
+    address +
+    '\n' +
+    paymentMethod +
+    '\n' +
+    productsDescription +
+    '\n' +
+    totalCartPrice
+  )
 }

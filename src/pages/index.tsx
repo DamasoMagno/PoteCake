@@ -29,7 +29,7 @@ export default function Home({ foods }: HomeProps) {
         <div className={styles.content}>
           <div>
             <h2>
-              A confetaria da
+              A confeitaria da
               <strong>Vizinhança</strong>
             </h2>
             <p>

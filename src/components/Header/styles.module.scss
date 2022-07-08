@@ -101,7 +101,7 @@
 
 .options {
   display: flex;
-  gap: 1rem;
+  gap: 1.5625rem;
 
   .cart {
     cursor: pointer;
@@ -110,8 +110,8 @@
 
     span {
       position: absolute;
-      right: -10px;
-      top: -5px;
+      right: -5px;
+      top: -3px;
       width: 1rem;
       height: 1rem;
       background: var(--brown-900);

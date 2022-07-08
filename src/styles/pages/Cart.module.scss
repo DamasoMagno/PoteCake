@@ -131,3 +131,41 @@
     }
   }
 }
+
+.filter {
+  padding: 0 0.5rem;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  border-radius: 0.25rem;
+  transition: border 0.2s, color 0.2s;
+  border: 2px solid rgba(0, 0, 0, 0.1);
+
+  select {
+    border: 0;
+    background: transparent;
+    outline: none;
+    height: 3rem;
+    width: 100%;
+    padding: 0 0.5rem;
+    margin-right: 0.25rem;
+    font-size: 1.125rem;
+    -webkit-appearance: none;
+
+    &::placeholder {
+      color: gray;
+    }
+  }
+
+  svg {
+    color: rgba(0, 0, 0, 0.1);
+  }
+
+  &:focus-within {
+    border-color: var(--brown-900);
+
+    svg {
+      color: var(--brown-900);
+    }
+  }
+}

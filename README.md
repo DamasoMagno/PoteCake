@@ -3,7 +3,7 @@
 <p>
   Projeto desenvolvido para gerenciar o cardápio de uma confeitaria, 
   permitindo que seus clientes possam visualizar seus produtos, ou inseri-los
-   em um carrinho para realizar futuras compra.
+  em um carrinho para realizar futuras compra.
 </p>
 
 ## Tecnologias Usadas

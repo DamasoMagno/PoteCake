@@ -7,6 +7,8 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   inputRef?: LegacyRef<HTMLInputElement>
 }
 
+interface SelectProps extends InputProps { }
+
 import styles from "./styles.module.scss";
 
 export function Input({
@@ -17,11 +19,8 @@ export function Input({
 }: InputProps) {
   return (
     <div className={styles.container}>
-      <input
-        {...props}
-        ref={inputRef}
-      />
-      {Icon && <Icon className={iconPosition ? styles.right : styles.left} />}
+      <input {...props} />
+      {Icon && <Icon style={{ order: iconPosition === "right" && 1 }} />}
     </div>
   );
 }

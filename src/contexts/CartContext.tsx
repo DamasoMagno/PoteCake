@@ -10,8 +10,10 @@ import { ProductCart } from "@interfaces/ProductCart";
 import { foodOrderFormatted } from "@utils/formatFoodOrder";
 import { alertMessage } from "@utils/alert";
 
+
 interface CartContextProps {
   cart: ProductCart[];
+  setPaymentMethod: (method: string) => void;
   addProductToCart(id: string): Promise<void>;
   incrementProductAmount(id: string): Promise<void>;
   decrementProductAmount(id: string): Promise<void>;
@@ -22,6 +24,7 @@ export const CartContext = createContext({} as CartContextProps);
 
 export const CartProvider: FC = ({ children }) => {
   const [cart, setCart] = useState<ProductCart[]>([]);
+  const [paymentMethod, setPaymentMethod] = useState("Dinheiro");
 
   useEffect(() => {
     const productsInCart = JSON.parse(localStorage.getItem("@cart"));
@@ -146,6 +149,7 @@ export const CartProvider: FC = ({ children }) => {
         name: user.name,
         lastName: user.lastName,
         address: user.address,
+        paymentMethod,
         cart
       }
     );
@@ -177,7 +181,8 @@ export const CartProvider: FC = ({ children }) => {
       addProductToCart,
       incrementProductAmount,
       decrementProductAmount,
-      checkout
+      checkout,
+      setPaymentMethod
     }}>
       {children}
     </CartContext.Provider>

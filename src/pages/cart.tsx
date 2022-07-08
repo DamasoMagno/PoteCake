@@ -1,7 +1,7 @@
 import Head from "next/head";
 
 import { ChangeEvent, useEffect, useState } from "react";
-import { MdAdd, MdDelete, MdRemove } from "react-icons/md";
+import { MdAdd, MdArrowDropDown, MdDelete, MdRemove } from "react-icons/md";
 import axios from "axios";
 
 import { useCart } from "@contexts/CartContext";
@@ -9,18 +9,20 @@ import { useCart } from "@contexts/CartContext";
 import { formatCurrency } from "@utils/formatCurrency";
 import { alertMessage } from "@utils/alert";
 
+import { User } from "@interfaces/User";
+
 import { Input } from "@components/Input";
 import { Button } from "@components/Button";
 
 import styles from "@styles/pages/Cart.module.scss";
-import { User } from "@interfaces/User";
 
 export default function Products() {
   const {
     cart,
     incrementProductAmount,
     decrementProductAmount,
-    checkout
+    checkout,
+    setPaymentMethod
   } = useCart();
 
   const [userName, setUserName] = useState("");
@@ -54,7 +56,7 @@ export default function Products() {
         setUserAddress("");
 
         alertMessage({
-          message: "Não entregamos fora de itapipoca",
+          message: "Não entregamos fora de Itapipoca",
           icon: "❌"
         });
 
@@ -84,15 +86,11 @@ export default function Products() {
       if (typeof userInfo[field] === "object") {
         Object.keys(userInfo[field])
           .forEach(attr => {
-            if (!userInfo[field][attr]) {
-              fieldsNotValid = true;
-            };
+            if (!userInfo[field][attr]) fieldsNotValid = true;
           })
       }
 
-      if (!userInfo[field]) {
-        fieldsNotValid = true;
-      }
+      if (!userInfo[field]) fieldsNotValid = true;
     }
 
     if (fieldsNotValid) {
@@ -141,11 +139,13 @@ export default function Products() {
             value={userName}
             onChange={e => setUserName(e.target.value)}
           />
+
           <Input
             placeholder="Sobrenome"
             value={userLastName}
             onChange={e => setUserLastName(e.target.value)}
           />
+
           <Input
             placeholder="Ensira um cep válido"
             onBlur={getUserAddress}
@@ -166,6 +166,15 @@ export default function Products() {
               value={userNumberAdress}
               onChange={e => setUserNumberAddress(e.target.value)}
             />
+          </div>
+
+          <div className={styles.filter}>
+            <select onChange={e => setPaymentMethod(e.target.value)}>
+              <option value="Débito">Débito</option>
+              <option value="Crédito">Crédito</option>
+              <option value="Dinehro">Dinheiro</option>
+            </select>
+            <MdArrowDropDown size={32} />
           </div>
 
           <Button
