@@ -9,7 +9,6 @@ inseri-los em um carrinho para realizar futuras compra.
 
 - Carrinho
 - Envio de pedido via whatsapp
-- 
 
 ## Tecnologias
 
