@@ -1,18 +1,25 @@
-# Descrição
+# Potecake
 
-<p>
-  Projeto desenvolvido para gerenciar o cardápio de uma confeitaria, 
-  permitindo que seus clientes possam visualizar seus produtos, ou inseri-los
-  em um carrinho para realizar futuras compra.
-</p>
+Projeto desenvolvido para gerenciar o cardápio de uma confeitaria, 
+permitindo que seus clientes possam visualizar seus produtos, ou 
+inseri-los em um carrinho para realizar futuras compra.
 
-## Tecnologias Usadas
 
-<ul>
- <li>NextJs</li>
- <li>SASS</li>
- <li>Apollo</li>
- <li>Vercel</li>
- <li>GraphCMS</li>
- <li>GraphQL</li>
-</ul>
+## Funcionalidades
+
+- Carrinho
+- Envio de pedido via whatsapp
+- 
+
+## Tecnologias
+
+**Front-end:** 
+- NextJs
+- SASS
+- Vercel
+- GraphQL
+- Apollo
+
+**Serviços:**
+- GraphCMS
+
